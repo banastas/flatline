@@ -3,6 +3,24 @@
     <channel>
         <title>flatline</title>
         <item>
+            <title>0.2.1</title>
+            <pubDate>Mon, 26 Oct 2026 07:50:17 -0700</pubDate>
+            <link>https://flatline.banast.as</link>
+            <sparkle:version>4</sparkle:version>
+            <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<ul>
+  <li>Uses less CPU when idle: about 0.1%, down from 0.14%. Drawing the menu bar is about four times cheaper.</li>
+</ul>
+]]></description>
+            <enclosure url="https://flatline.banast.as/releases/flatline-0.2.1.dmg" length="3415800" type="application/octet-stream" sparkle:edSignature="hKl0P1X2Yj/VzxwR3J3aMOXy8Ii7gssCYVVuLLEL+KKmmS05Y7oROF36KMmOWTCrN0Tz5o0b4Mv3H/9QXPcHAQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://flatline.banast.as/releases/flatline4-3.delta" sparkle:deltaFrom="3" length="60050" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TB8hoQi4k8iKfYWKY8IgFxvVckgEQx1B1nNdSkMJw4xt3PPqwV1faH7ieefgfhdzCjvObQvBOpURarf69BKrAQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline4-2.delta" sparkle:deltaFrom="2" length="1239674" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="AM4ppCxw61JfbqCLa8cBP0/7xQnTEv4eYq6P5aFA5n9+phbWebKW+4KwfjS6BSaCsnKL4uV2Lce8Uq79O0BjDg=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline4-1.delta" sparkle:deltaFrom="1" length="1239894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vac439n3M8+TxV4Vfdy0S3TXHiKRaXQEWGb3c9AXPEQUEMgLfptFvb8uml7AHaSa/SOzbHuI+Ls0TzNnSoHJDw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>0.2.0</title>
             <pubDate>Sun, 25 Oct 2026 23:13:29 -0700</pubDate>
             <link>https://flatline.banast.as</link>
@@ -37,24 +55,6 @@
             <sparkle:deltas>
                 <enclosure url="https://flatline.banast.as/releases/flatline2-1.delta" sparkle:deltaFrom="1" length="10878" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zqbMQ0LkHHaCurNjI4THXY/sTs89K7jsm16zHxMeQ6zNGZ3Iol/8WhOFd/y0oEVvusce8NnLIGQBc6gNyvAfAg=="/>
             </sparkle:deltas>
-        </item>
-        <item>
-            <title>0.1.0</title>
-            <pubDate>Sun, 25 Oct 2026 22:17:58 -0700</pubDate>
-            <link>https://flatline.banast.as</link>
-            <sparkle:version>1</sparkle:version>
-            <sparkle:shortVersionString>0.1.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<p>First build.</p>
-<ul>
-  <li>Menu bar readout of CPU, memory and network, as text, a mini trace, or both</li>
-  <li>Popover with 60-second traces, per-core load split by Performance and Efficiency clusters, memory breakdown with pressure, network totals and active interface</li>
-  <li>Settings for metrics, styles, units, refresh rate, accent color and launch at login</li>
-  <li>Automatic updates, checked daily</li>
-  <li>About 0.07% CPU at a 1-second refresh</li>
-</ul>
-]]></description>
-            <enclosure url="https://flatline.banast.as/releases/flatline-0.1.0.dmg" length="1275118" type="application/octet-stream" sparkle:edSignature="kQq3qt1GY3cfTRfS2nw4ulrNE/Hj/HahcMAJk0EXM/bHBeASkJXFBspcPbKbVqaUIJJDZE6ZIwMk+yts3xmzBQ=="/>
         </item>
     </channel>
 </rss>
