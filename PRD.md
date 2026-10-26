@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.4: M0–M6 done (0.1.1 live; update from 0.1.0 tested) |
+| **Status** | Draft v0.5: M0–M6 done, 0.2.0 live, accuracy verified (§9.1) |
 | **Owner** | Bill Anastas |
 | **Last updated** | 2026-10-25 |
 | **Repo** | [banastas/flatline](https://github.com/banastas/flatline) |
@@ -239,6 +239,31 @@ These budgets are checked before each release with Instruments (Time Profiler, A
 | Memory pressure level | Activity Monitor pressure color | exact match |
 | Network rates | Activity Monitor Network tab / `nettop` | ± 5 % over a sustained 30 s transfer |
 | Counter wrap | Transfer > 4 GiB | no spikes or negative values |
+
+### 9.1 Verification, 2026-10-25 (0.2.0, M2 Pro, 32 GB)
+
+Measured with flatline's own sampler code next to the reference tool over the same window.
+
+| Check | Result | Target | Pass |
+|---|---|---|---|
+| CPU total vs `top` (20 s windows: background, 6 cores busy, 12 cores busy) | −1.0 to +1.0 points | ± 3 | ✅ |
+| CPU user/system split vs `top` | within 0.7 points | — | ✅ |
+| Per-cluster CPU | P 80% / E 49% with 6 busy threads (plausible); not compared with `powermetrics`, which needs sudo | ± 5 | not run |
+| App / wired / compressed / cached / swap vs Activity Monitor | each within normal second-to-second movement; identical to `vm_stat` at the same instant | ± 1% of RAM | ✅ |
+| "Memory Used" vs Activity Monitor's headline | 0.5–0.8 GB lower. Activity Monitor's headline exceeds the sum of its own app + wired + compressed by that much, and the gap isn't documented. flatline shows the sum. | ± 1% of RAM | ⚠️ by design |
+| Memory pressure level | matches | exact | ✅ |
+| Network rate vs `netstat` during a 30 s, ~19 MB/s download | within 0.05% | ± 5% | ✅ |
+| 64-bit counters past 4 GiB | interface counters at 1.9 TB read correctly | no wrap | ✅ |
+
+Footprint on a quiet machine, 2 minutes, popover closed (eul 1.6.2 measured over the same window):
+
+| | flatline 0.2.0 | eul 1.6.2 | Budget |
+|---|---|---|---|
+| Average CPU | 0.14% | 1.03% | < 0.1% ❌ |
+| Memory | 13 MB (26 MB after the popover has been opened) | 75 MB | < 30 MB ✅ |
+| Idle wake-ups (20 s) | 3 | 11,822 | ≤ 1 per tick ✅ |
+
+On an idle machine the cores clock down and every tick phase takes about twice as long as under load (0.07% CPU was measured under load). Rendering the menu bar bitmap is now the largest cost (about 420 µs per tick on a quiet machine): it allocates and clears a new bitmap and lays out text every second.
 
 ## 10. Accessibility and localization
 
