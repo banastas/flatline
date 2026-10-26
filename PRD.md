@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.2: M0–M4 built |
+| **Status** | Draft v0.3: M0–M5 done (notarized 0.1.0 DMG built) |
 | **Owner** | Bill Anastas |
 | **Last updated** | 2026-10-25 |
 | **Repo** | [banastas/flatline](https://github.com/banastas/flatline) |
