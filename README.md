@@ -48,12 +48,24 @@ Debug builds are ad-hoc signed and run on any Mac. Release builds are signed wit
 
 ## Releasing
 
-```bash
-scripts/bump-version.sh 0.2.0   # sets the version, increments the build number
-scripts/release.sh              # test, archive, sign, notarize, staple → dist/flatline-0.2.0.dmg
-```
+1. Add a `## 0.2.0 (date)` section to [CHANGELOG.md](CHANGELOG.md). It becomes the release notes.
+2. Run:
 
-`release.sh --skip-notarize` makes a signed but un-notarized DMG for a quick check. Notarization reads Apple ID credentials from a keychain profile, created once with `xcrun notarytool store-credentials flatline --team-id F87BNUZAVJ`.
+   ```bash
+   scripts/bump-version.sh 0.2.0   # sets the version, increments the build number
+   scripts/release.sh              # test, archive, sign, notarize, staple, add to the update feed
+   scripts/deploy-site.sh          # publish flatline.banast.as: page, appcast, DMGs
+   ```
+
+3. Commit `site/appcast.xml`, `project.yml` and the changelog.
+
+`release.sh --skip-notarize` makes a signed but un-notarized DMG for a quick check.
+
+One-time setup on the release Mac:
+
+- Notary credentials: `xcrun notarytool store-credentials flatline --team-id F87BNUZAVJ`
+- Sparkle's update-signing key, in the login keychain under account `flatline`. Back it up somewhere safe; without it, existing installs can't verify new updates. Export it with `build/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys --account flatline -x <file>` and restore it with `-f <file>`.
+- Cloudflare: `npx wrangler login`. `releases/` (every shipped DMG) lives only on the release Mac and the live site.
 
 ## License
 

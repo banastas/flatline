@@ -15,13 +15,14 @@ extension EnvironmentValues {
 struct PopoverView: View {
     let engine: MetricsEngine
     @Bindable var preferences: Preferences
+    let updater: Updater
     @Bindable var state: PopoverState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HeaderView(chipName: engine.topology.chipName)
             if state.showingSettings {
-                SettingsView(preferences: preferences)
+                SettingsView(preferences: preferences, updater: updater)
             } else {
                 CPUCard(engine: engine)
                 MemoryCard(engine: engine)

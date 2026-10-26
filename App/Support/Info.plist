@@ -28,5 +28,13 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Bill Anastas</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://flatline.banast.as/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>n40fk0wdEFQuVGL1tzJ10+OzdGC4hvsFUuvFWPSWRP4=</string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>

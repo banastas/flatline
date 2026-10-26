@@ -1,0 +1,40 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>flatline</title>
+        <item>
+            <title>0.1.1</title>
+            <pubDate>Sun, 25 Oct 2026 22:23:28 -0700</pubDate>
+            <link>https://flatline.banast.as</link>
+            <sparkle:version>2</sparkle:version>
+            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<ul>
+  <li>First release delivered through automatic updates; no other changes.</li>
+</ul>
+]]></description>
+            <enclosure url="https://flatline.banast.as/releases/flatline-0.1.1.dmg" length="1276009" type="application/octet-stream" sparkle:edSignature="84y+EEx48iaA2q1CNwPH6MpOT2fURvmCjIKQOVlTS1vqHiINFzfEqNx04mxM9NbHflaQWYPFDgybaP38agyuBQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://flatline.banast.as/releases/flatline2-1.delta" sparkle:deltaFrom="1" length="10878" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zqbMQ0LkHHaCurNjI4THXY/sTs89K7jsm16zHxMeQ6zNGZ3Iol/8WhOFd/y0oEVvusce8NnLIGQBc6gNyvAfAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1.0</title>
+            <pubDate>Sun, 25 Oct 2026 22:17:58 -0700</pubDate>
+            <link>https://flatline.banast.as</link>
+            <sparkle:version>1</sparkle:version>
+            <sparkle:shortVersionString>0.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<p>First build.</p>
+<ul>
+  <li>Menu bar readout of CPU, memory and network, as text, a mini trace, or both</li>
+  <li>Popover with 60-second traces, per-core load split by Performance and Efficiency clusters, memory breakdown with pressure, network totals and active interface</li>
+  <li>Settings for metrics, styles, units, refresh rate, accent color and launch at login</li>
+  <li>Automatic updates, checked daily</li>
+  <li>About 0.07% CPU at a 1-second refresh</li>
+</ul>
+]]></description>
+            <enclosure url="https://flatline.banast.as/releases/flatline-0.1.0.dmg" length="1275118" type="application/octet-stream" sparkle:edSignature="kQq3qt1GY3cfTRfS2nw4ulrNE/Hj/HahcMAJk0EXM/bHBeASkJXFBspcPbKbVqaUIJJDZE6ZIwMk+yts3xmzBQ=="/>
+        </item>
+    </channel>
+</rss>

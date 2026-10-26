@@ -136,21 +136,21 @@ Shown in the popover (an inline settings panel, not a separate window), stored i
 
 ### 6.5 Updates (Sparkle)
 
-- **Sparkle 2** via Swift Package Manager, using `SPUStandardUpdaterController`.
-- Appcast at `https://flatline.banast.as/appcast.xml`, served over HTTPS.
-- Updates are signed with **EdDSA (ed25519)**. The public key goes in `Info.plist` (`SUPublicEDKey`). The private key stays in the macOS Keychain or CI secrets and is **never committed**.
-- Archives are notarized DMG or ZIP files hosted at `https://flatline.banast.as/releases/`.
-- The appcast is generated with Sparkle's `generate_appcast` as part of the release script; release notes come from `CHANGELOG.md`.
-- The app is not sandboxed, so Sparkle's XPC installer services are not needed.
-- "Check for Updates…" appears in the right-click menu and the settings panel.
+- **Sparkle 2.10.0** (pinned) via Swift Package Manager, using `SPUStandardUpdaterController`. Checks daily without a first-run prompt (`SUEnableAutomaticChecks`); gentle reminders are on because flatline has no Dock icon.
+- Appcast at `https://flatline.banast.as/appcast.xml`, served over HTTPS with `Cache-Control: no-cache`.
+- Updates are signed with **EdDSA (ed25519)**. The public key is in `Info.plist` (`SUPublicEDKey`). The private key is in the release Mac's login keychain under account `flatline` and is **never committed**. Losing it means existing installs can't verify future updates, so keep an exported backup in a password manager.
+- The update archive is the same notarized, stapled DMG people download, at `https://flatline.banast.as/releases/flatline-<version>.dmg`.
+- `scripts/release.sh` copies each DMG and its notes into `releases/` (local, git-ignored: the archive of everything shipped) and runs `generate_appcast`, which signs the entries and rewrites `site/appcast.xml` (committed). Release notes are the `CHANGELOG.md` section for the version, embedded as HTML.
+- "Check for Updates…" appears in the right-click menu; the settings panel has automatic check/download toggles and "check now".
 
 ### 6.6 Website (flatline.banast.as)
 
-A small static site, kept in this repo under `site/`:
+A small static site, kept in this repo under `site/`, served by the static-assets Worker in `wrangler.jsonc` (Cloudflare Pages' current form) with `flatline.banast.as` as its custom domain:
 
-- A landing page: what it is, a screenshot, a download button pointing at the latest DMG, system requirements
-- `appcast.xml` and `releases/` for Sparkle
-- Release notes page
+- A landing page: what it is, a download button, system requirements, and the latest release notes. `scripts/deploy-site.sh` fills in the version, size and notes.
+- `/download` redirects to the newest DMG (`_redirects`, generated on deploy)
+- `appcast.xml` and `releases/` for Sparkle; `_headers` sets caching (appcast never cached, releases immutable)
+- To do for 1.0: a screenshot
 
 ## 7. Technical design
 
@@ -265,7 +265,7 @@ These budgets are checked before each release with Instruments (Time Profiler, A
 | Question | Decision (2026-10-25) |
 |---|---|
 | Apple Developer account | Yes. Releases are signed with **Developer ID Application (team `F87BNUZAVJ`)** and notarized with `notarytool`, using a keychain profile named `flatline`. |
-| Hosting for flatline.banast.as | **Cloudflare Pages** for the site and `appcast.xml`. DMGs go there too while they fit Pages' per-file limit; move them to R2 if not. |
+| Hosting for flatline.banast.as | **Cloudflare**, as a static-assets Worker (`flatline-banast-as`; wrangler now routes new Pages projects there). Site, appcast and DMGs together; the per-file limit is 25 MiB, so move DMGs to R2 if they ever exceed it. |
 | License | **MIT**. |
 | Menu bar severity colors | **Removed**; colored text was hard to read on a see-through menu bar (see §6.2). |
 

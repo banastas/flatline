@@ -43,6 +43,8 @@ Packages/**/Package.resolved
 
 # ── Release artifacts ────────────────────────────────
 dist/
+# Every shipped DMG, delta and notes file; deploy-site.sh publishes them.
+releases/
 *.dmg
 *.app
 *.zip
@@ -72,4 +74,5 @@ site/.cache/
 *~
 
 # macOS custom folder icons (the name ends in two carriage returns)
-Icon
+Icon
+

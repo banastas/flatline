@@ -8,6 +8,7 @@ import SwiftUI
 final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
     private let engine: MetricsEngine
     private let preferences: Preferences
+    private let updater: Updater
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let popover = NSPopover()
     private let popoverState = PopoverState()
@@ -26,9 +27,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
     private let contentLayer = CALayer()
     private static let horizontalPadding: CGFloat = 4
 
-    init(engine: MetricsEngine, preferences: Preferences) {
+    init(engine: MetricsEngine, preferences: Preferences, updater: Updater) {
         self.engine = engine
         self.preferences = preferences
+        self.updater = updater
         super.init()
 
         statusItem.autosaveName = "flatline"
@@ -124,7 +126,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
         guard let button = statusItem.button else { return }
 
         popoverState.showingSettings = settings
-        let controller = NSHostingController(rootView: PopoverView(engine: engine, preferences: preferences, state: popoverState))
+        let controller = NSHostingController(rootView: PopoverView(engine: engine, preferences: preferences, updater: updater, state: popoverState))
         controller.sizingOptions = .preferredContentSize
         popover.contentViewController = controller
 
@@ -144,6 +146,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
         menu.delegate = self
         menu.addItem(withTitle: "Open flatline", action: #selector(openPopover), keyEquivalent: "").target = self
         menu.addItem(withTitle: "Settings…", action: #selector(openSettings), keyEquivalent: ",").target = self
+        menu.addItem(withTitle: "Check for Updates…", action: #selector(checkForUpdates), keyEquivalent: "").target = self
         menu.addItem(.separator())
         menu.addItem(withTitle: "Quit flatline", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
 
@@ -158,4 +161,5 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
 
     @objc private func openPopover() { togglePopover(settings: false) }
     @objc private func openSettings() { togglePopover(settings: true) }
+    @objc private func checkForUpdates() { updater.checkForUpdates() }
 }

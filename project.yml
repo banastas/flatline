@@ -13,8 +13,8 @@ settings:
     ARCHS: arm64
     ONLY_ACTIVE_ARCH: NO
     MACOSX_DEPLOYMENT_TARGET: "27.0"
-    MARKETING_VERSION: 0.1.0
-    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.1
+    CURRENT_PROJECT_VERSION: 2
     ENABLE_HARDENED_RUNTIME: YES
     ENABLE_APP_SANDBOX: NO
     CODE_SIGN_STYLE: Manual
@@ -32,6 +32,9 @@ settings:
 packages:
   FlatlineKit:
     path: Packages/FlatlineKit
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    exactVersion: 2.10.0
 
 targets:
   Flatline:
@@ -41,6 +44,7 @@ targets:
       - path: App
     dependencies:
       - package: FlatlineKit
+      - package: Sparkle
     info:
       path: App/Support/Info.plist
       properties:
@@ -52,6 +56,12 @@ targets:
         LSApplicationCategoryType: public.app-category.utilities
         LSUIElement: true
         NSHumanReadableCopyright: © 2026 Bill Anastas
+        # Sparkle. Checks daily without asking first; the private half of
+        # SUPublicEDKey lives in the release machine's keychain (account "flatline").
+        SUFeedURL: https://flatline.banast.as/appcast.xml
+        SUPublicEDKey: n40fk0wdEFQuVGL1tzJ10+OzdGC4hvsFUuvFWPSWRP4=
+        SUEnableAutomaticChecks: true
+        SUScheduledCheckInterval: 86400
     settings:
       base:
         PRODUCT_NAME: flatline

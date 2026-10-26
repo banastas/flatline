@@ -3,9 +3,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @Bindable var preferences: Preferences
+    let updater: Updater
     @Environment(\.accent) private var accent
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var loginError: String?
+    @State private var autoCheck = false
+    @State private var autoDownload = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -58,11 +61,25 @@ struct SettingsView: View {
                     Text(loginError).font(.caption2).foregroundStyle(.red)
                 }
             }
+
+            Section(title: "UPDATES") {
+                Toggle("check automatically", isOn: $autoCheck)
+                    .onChange(of: autoCheck) { _, on in updater.automaticallyChecks = on }
+                Toggle("download automatically", isOn: $autoDownload)
+                    .onChange(of: autoDownload) { _, on in updater.automaticallyDownloads = on }
+                    .disabled(!autoCheck)
+                Button("check now") { updater.checkForUpdates() }
+                    .buttonStyle(.borderless)
+            }
         }
         .font(.caption)
         .pickerStyle(.segmented)
         .toggleStyle(.switch)
         .controlSize(.small)
+        .onAppear {
+            autoCheck = updater.automaticallyChecks
+            autoDownload = updater.automaticallyDownloads
+        }
     }
 
     /// The last enabled metric can't be switched off, or the status item would be empty.

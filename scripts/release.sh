@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-# Builds, signs, notarizes and packages flatline as a DMG in dist/.
+# Builds, signs, notarizes and packages flatline as a DMG in dist/, then adds
+# it to the Sparkle update feed: the DMG and its release notes go to releases/
+# (kept locally, not in git) and site/appcast.xml is regenerated. Publish with
+# scripts/deploy-site.sh.
 #
 #   scripts/release.sh                  full release
-#   scripts/release.sh --skip-notarize  signed but not notarized (dry run)
+#   scripts/release.sh --skip-notarize  signed but not notarized (dry run, no feed update)
 #
+# Release notes come from the "## <version>" section of CHANGELOG.md. Updates
+# are signed with the EdDSA key in the keychain under account "flatline".
 # Notarization reads credentials from a keychain profile (default "flatline",
 # override with NOTARY_PROFILE). Create it once with:
 #   xcrun notarytool store-credentials flatline --team-id F87BNUZAVJ
@@ -22,8 +27,24 @@ ARCHIVE=$DIST/flatline.xcarchive
 EXPORT=$DIST/export
 APP=$EXPORT/flatline.app
 DMG=$DIST/flatline-$VERSION.dmg
+RELEASES=releases
+SITE_URL=https://flatline.banast.as
+SPARKLE_BIN=build/SourcePackages/artifacts/sparkle/Sparkle/bin
 
 step() { printf '\n==> %s\n' "$*"; }
+html_escape() { sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+
+# The CHANGELOG.md section for $VERSION as an HTML fragment: bullets become a
+# list, other lines paragraphs. Sparkle embeds fragments without <html>/<body>.
+release_notes_html() {
+    awk -v version="$VERSION" '
+        /^## / { if (found) exit; if (index($0, "## " version) == 1) { found = 1 }; next }
+        !found { next }
+        /^- / { if (!list) { print "<ul>"; list = 1 }; sub(/^- /, ""); print "  <li>" $0 "</li>"; next }
+        NF { if (list) { print "</ul>"; list = 0 }; print "<p>" $0 "</p>" }
+        END { if (list) print "</ul>" }
+    ' < <(html_escape < CHANGELOG.md)
+}
 fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 
 # Submits a file for notarization and waits; prints Apple's log on rejection.
@@ -44,6 +65,10 @@ IDENTITY=$(security find-identity -v -p codesigning | sed -nE "s/.*\"(Developer 
 if (( NOTARIZE )); then
     xcrun notarytool history --keychain-profile "$PROFILE" >/dev/null 2>&1 \
         || fail "no notary credentials in keychain profile '$PROFILE'; run: xcrun notarytool store-credentials $PROFILE --team-id $TEAM_ID"
+    [[ ! -e $RELEASES/flatline-$VERSION.dmg ]] \
+        || fail "$VERSION is already in $RELEASES/; run scripts/bump-version.sh first"
+    NOTES=$(release_notes_html)
+    [[ -n $NOTES ]] || fail "CHANGELOG.md has no \"## $VERSION\" section"
 fi
 
 step "flatline $VERSION ($BUILD), signing as $IDENTITY"
@@ -102,9 +127,26 @@ if (( NOTARIZE )); then
     spctl --assess --type execute "$APP"
     spctl --assess --type open --context context:primary-signature "$DMG"
     echo "    app and DMG accepted (notarized, stapled)"
+
+    step "Adding $VERSION to the update feed"
+    "$SPARKLE_BIN/generate_keys" --account flatline -p >/dev/null \
+        || fail "no Sparkle signing key in the keychain (account flatline)"
+    mkdir -p "$RELEASES" site
+    cp "$DMG" "$RELEASES/"
+    printf '%s\n' "$NOTES" > "$RELEASES/flatline-$VERSION.html"
+    "$SPARKLE_BIN/generate_appcast" --account flatline \
+        --download-url-prefix "$SITE_URL/releases/" --link "$SITE_URL" \
+        -o site/appcast.xml "$RELEASES"
+    grep -q "<sparkle:shortVersionString>$VERSION</sparkle:shortVersionString>" site/appcast.xml \
+        || fail "site/appcast.xml has no entry for $VERSION"
+    echo "    $RELEASES/flatline-$VERSION.dmg, site/appcast.xml"
 fi
 
 step "Done"
 echo "    $DMG"
 echo "    $(du -h "$DMG" | cut -f1)  sha256 $(shasum -a 256 "$DMG" | cut -d' ' -f1)"
-(( NOTARIZE )) || echo "    not notarized: run without --skip-notarize for a shippable build"
+if (( NOTARIZE )); then
+    echo "    publish with: scripts/deploy-site.sh"
+else
+    echo "    not notarized: run without --skip-notarize for a shippable build"
+fi
