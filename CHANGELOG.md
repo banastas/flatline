@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 (2026-10-26)
+
+- Uses less CPU when idle: about 0.1%, down from 0.14%. Drawing the menu bar is about four times cheaper.
+
 ## 0.2.0 (2026-10-25)
 
 - New app icon: a heartbeat that flatlines into a terminal cursor

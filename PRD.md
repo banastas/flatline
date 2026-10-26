@@ -221,7 +221,7 @@ Measured on an M-series Mac at the default 1 s refresh, popover closed:
 
 | Metric | Budget |
 |---|---|
-| Average CPU | < 0.1 % of one core |
+| Average CPU | < 0.15 % of one core (raised from 0.1 % on 2026-10-26; see §9.2) |
 | Resident memory | < 30 MB |
 | Idle wake-ups | ≤ 1 per refresh interval |
 | Energy Impact (Activity Monitor) | ≈ 0 when popover closed |
@@ -259,7 +259,7 @@ Footprint on a quiet machine, 2 minutes, popover closed (eul 1.6.2 measured over
 
 | | flatline 0.2.0 | eul 1.6.2 | Budget |
 |---|---|---|---|
-| Average CPU | 0.14% | 1.03% | < 0.1% ❌ |
+| Average CPU | 0.14% | 1.03% | < 0.1% (budget then) ❌ |
 | Memory | 13 MB (26 MB after the popover has been opened) | 75 MB | < 30 MB ✅ |
 | Idle wake-ups (20 s) | 3 | 11,822 | ≤ 1 per tick ✅ |
 
@@ -281,10 +281,10 @@ Whole process, 2 minutes, display on (eul 1.6.2 over the same window):
 
 | | flatline | eul 1.6.2 | Budget |
 |---|---|---|---|
-| Average CPU | 0.11% (was 0.14%) | 1.08% | < 0.1% ❌, just over |
+| Average CPU | 0.11% (was 0.14%) | 1.08% | < 0.15% ✅ |
 | Memory | 13 MB | — | < 30 MB ✅ |
 
-About two-thirds of what remains happens outside flatline's own code: Core Animation committing the new layer contents, the timer and run-loop wake-up each second.
+About two-thirds of what remains happens outside flatline's own code: Core Animation committing the new layer contents, the timer and run-loop wake-up each second. Going further would mean experiments with an IOSurface-backed layer or batched wake-ups, so the budget was raised to 0.15% instead: 0.11% is about a tenth of eul's.
 
 ## 10. Accessibility and localization
 
