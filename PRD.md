@@ -317,7 +317,7 @@ About two-thirds of what remains happens outside flatline's own code: Core Anima
 | Repo visibility | **Private until 1.0**, public with the 1.0 release. |
 | Top processes in the popover | **Not in 1.0.** Without a privileged helper the list would miss root-owned processes. |
 | Default network unit | **bytes/s**, matching Activity Monitor, Safari and Finder; bits/s is a setting. |
-| Homebrew | **Offer a cask after 1.0** (`brew install --cask flatline`), pointing at the DMG on flatline.banast.as. |
+| Homebrew | **Cask in `banastas/homebrew-tap`** (`brew install --cask banastas/tap/flatline`), pointing at the DMG on flatline.banast.as and checked by livecheck against the appcast. `scripts/update-cask.sh` bumps it each release. |
 
 ## 13. Open questions
 

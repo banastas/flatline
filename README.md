@@ -35,7 +35,13 @@ flatline is a deliberately narrow alternative to all-in-one monitors like [eul](
 
 ## Install
 
-Download the latest DMG from **[flatline.banast.as](https://flatline.banast.as)**, open it and drag flatline to Applications. It updates itself after that.
+Download the latest DMG from **[flatline.banast.as](https://flatline.banast.as)**, open it and drag flatline to Applications. Or use Homebrew:
+
+```bash
+brew install --cask banastas/tap/flatline
+```
+
+Either way, it updates itself after that.
 
 ## Building from source
 
@@ -64,6 +70,7 @@ Debug builds are ad-hoc signed and run on any Mac. Release builds are signed wit
    scripts/bump-version.sh 0.2.0   # sets the version, increments the build number
    scripts/release.sh              # test, archive, sign, notarize, staple, add to the update feed
    scripts/deploy-site.sh          # publish flatline.banast.as: page, appcast, DMGs
+   scripts/update-cask.sh          # point the Homebrew cask at the new DMG and push the tap
    ```
 
 3. Commit `site/appcast.xml`, `project.yml` and the changelog.
@@ -74,6 +81,7 @@ One-time setup on the release Mac:
 
 - Notary credentials: `xcrun notarytool store-credentials flatline --team-id F87BNUZAVJ`
 - Sparkle's update-signing key, in the login keychain under account `flatline`. Back it up somewhere safe; without it, existing installs can't verify new updates. Export it with `build/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys --account flatline -x <file>` and restore it with `-f <file>`.
+- Homebrew tap: [banastas/homebrew-tap](https://github.com/banastas/homebrew-tap) cloned next to this repo (`../homebrew-tap`).
 - Cloudflare: `npx wrangler login`. `releases/` (every shipped DMG) lives only on the release Mac and the live site.
 
 ## License
