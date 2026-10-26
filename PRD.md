@@ -104,7 +104,7 @@ Page size comes from `hw.pagesize` (16 KB on Apple Silicon). Never hard-code it.
 - Network text shows up and down stacked, with arrows (`↑ 34 KB/s` / `↓ 1.2 MB/s`).
 - **Fixed widths**: monospaced digits; each segment's width is sized for its widest possible value, so the bar never moves.
 - Renders monochrome as a template image by default, so it matches the system menu bar. An optional setting tints values by severity (CPU > 80 %, memory pressure warning/critical).
-- Click opens the popover. Right-click or ⌥-click opens a small menu (Settings, Check for Updates, Quit).
+- Click opens the popover. Right-click or Control-click opens a small menu (Open, Settings, Check for Updates, Quit).
 - VoiceOver: the item reads a summary such as "CPU 23 percent, memory 61 percent, down 1.2 megabytes per second, up 34 kilobytes per second."
 
 ### 6.3 Popover
