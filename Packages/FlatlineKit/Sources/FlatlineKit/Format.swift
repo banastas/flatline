@@ -29,7 +29,7 @@ public enum Format {
 
     /// Compact gigabytes for the menu bar: `"12.4G"`.
     public static func gigabytesCompact(_ count: UInt64) -> String {
-        String(format: "%.1fG", Double(count) / 1_073_741_824)
+        oneDecimal(Double(count) / 1_073_741_824) + "G"
     }
 
     /// `"3d 4h"`, `"4h 12m"`, `"12m"`
@@ -49,11 +49,18 @@ public enum Format {
             index += 1
         }
         let number = switch value {
-        case _ where index == 0: String(format: "%.0f", value)
-        case ..<99.95: String(format: "%.1f", value)
-        default: String(format: "%.0f", value)
+        case _ where index == 0: String(Int(value.rounded()))
+        case ..<99.95: oneDecimal(value)
+        default: String(Int(value.rounded()))
         }
         return (number, units[index])
+    }
+
+    /// `"12.3"`. Integer arithmetic: this runs every tick, and
+    /// `String(format:)` costs several times more.
+    private static func oneDecimal(_ value: Double) -> String {
+        let tenths = Int((value * 10).rounded())
+        return "\(tenths / 10).\(tenths % 10)"
     }
 }
 

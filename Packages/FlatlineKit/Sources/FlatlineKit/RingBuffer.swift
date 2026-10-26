@@ -22,7 +22,13 @@ public struct RingBuffer<Element: Sendable>: Sendable {
 
     /// The newest `count` elements, oldest first.
     public func suffix(_ count: Int) -> [Element] {
-        Array(elements.suffix(count))
+        let count = min(count, capacity)
+        var result: [Element] = []
+        result.reserveCapacity(count)
+        for offset in (capacity - count)..<capacity {
+            result.append(storage[(head + offset) % capacity])
+        }
+        return result
     }
 
     public var last: Element {

@@ -30,6 +30,9 @@ public final class MemorySampler {
     private let host = mach_host_self()
     private let pageSize = UInt64(Sysctl.int("hw.pagesize") ?? 16_384)
     private let physical = UInt64(Sysctl.int("hw.memsize") ?? 0)
+    private let swapUsage = SysctlMIB("vm.swapusage")
+    private let pressureLevel = SysctlMIB("kern.memorystatus_vm_pressure_level")
+    private let availableLevel = SysctlMIB("kern.memorystatus_level")
 
     public init() {}
 
@@ -57,16 +60,16 @@ public final class MemorySampler {
             stats.cached = (UInt64(vm.external_page_count) + purgeable) * pageSize
         }
 
-        if let swap = Sysctl.value("vm.swapusage", as: xsw_usage.self, initial: xsw_usage()) {
+        if let swap = swapUsage?.value(initial: xsw_usage()) {
             stats.swapUsed = swap.xsu_used
             stats.swapTotal = swap.xsu_total
         }
 
-        if let level = Sysctl.int("kern.memorystatus_vm_pressure_level") {
-            stats.pressure = MemoryPressure(rawValue: level) ?? .normal
+        if let level = pressureLevel?.value(initial: Int32(0)) {
+            stats.pressure = MemoryPressure(rawValue: Int(level)) ?? .normal
         }
-        if let available = Sysctl.int("kern.memorystatus_level") {
-            stats.pressureFraction = Double(max(0, min(100, 100 - available))) / 100
+        if let available = availableLevel?.value(initial: Int32(0)) {
+            stats.pressureFraction = Double(max(0, min(100, 100 - Int(available)))) / 100
         }
         return stats
     }

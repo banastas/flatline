@@ -1,4 +1,5 @@
 import AppKit
+import ImageIO
 import Observation
 import SwiftUI
 
@@ -22,6 +23,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
     }
     private var lastRender: RenderKey?
     private var lastAccessibilityLabel: String?
+    private var accessibilityTick = 0
 
     /// Holds the rendered bitmap. Setting `button.image` instead makes NSButton
     /// re-render the image on the CPU every tick, which was about 2 ms of work;
@@ -52,11 +54,16 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
 
     private func redraw() {
         guard let button = statusItem.button else { return }
-        Profiler.measure("a11y") {
-            let label = MenuBarRenderer.accessibilityLabel(engine: engine, preferences: preferences)
-            if label != lastAccessibilityLabel {
-                lastAccessibilityLabel = label
-                button.setAccessibilityLabel(label)
+        // The label is only read when something asks for it; refresh it every
+        // tick for VoiceOver users and every fifth tick otherwise.
+        accessibilityTick += 1
+        if NSWorkspace.shared.isVoiceOverEnabled || accessibilityTick % 5 == 1 {
+            Profiler.measure("a11y") {
+                let label = MenuBarRenderer.accessibilityLabel(engine: engine, preferences: preferences)
+                if label != lastAccessibilityLabel {
+                    lastAccessibilityLabel = label
+                    button.setAccessibilityLabel(label)
+                }
             }
         }
 
@@ -81,6 +88,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
             )
             contentLayer.contents = image
         }
+        if let path = Self.snapshotPath { Self.writeSnapshot(image, to: path) }
     }
 
     /// Redraw (and retime) as soon as a setting changes instead of waiting for the next tick.
@@ -171,6 +179,18 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
     func menuDidClose(_ menu: NSMenu) {
         // Detach so the next left-click goes back to the popover.
         statusItem.menu = nil
+    }
+
+    // MARK: - Development
+
+    /// `FLATLINE_SNAPSHOT=<file.png>` writes every rendered menu bar image to
+    /// that file, for checking rendering without a screen capture.
+    private static let snapshotPath = ProcessInfo.processInfo.environment["FLATLINE_SNAPSHOT"]
+
+    private static func writeSnapshot(_ image: CGImage, to path: String) {
+        guard let destination = CGImageDestinationCreateWithURL(URL(fileURLWithPath: path) as CFURL, "public.png" as CFString, 1, nil) else { return }
+        CGImageDestinationAddImage(destination, image, nil)
+        CGImageDestinationFinalize(destination)
     }
 
     @objc private func openPopover() { togglePopover(settings: false) }
