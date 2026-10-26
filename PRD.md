@@ -263,7 +263,28 @@ Footprint on a quiet machine, 2 minutes, popover closed (eul 1.6.2 measured over
 | Memory | 13 MB (26 MB after the popover has been opened) | 75 MB | < 30 MB ✅ |
 | Idle wake-ups (20 s) | 3 | 11,822 | ≤ 1 per tick ✅ |
 
-On an idle machine the cores clock down and every tick phase takes about twice as long as under load (0.07% CPU was measured under load). Rendering the menu bar bitmap is now the largest cost (about 420 µs per tick on a quiet machine): it allocates and clears a new bitmap and lays out text every second.
+On an idle machine the cores clock down and every tick phase takes about twice as long as under load (0.07% CPU was measured under load). Rendering the menu bar bitmap was the largest cost (about 420 µs per tick on a quiet machine): it allocated and cleared a new bitmap and laid out text every second.
+
+### 9.2 After the render optimization, 2026-10-26 (`f7e6d55`)
+
+Text is drawn from cached per-character cells into two alternating canvases; images wrap the pixels without a copy. Steady-state per-tick cost on a quiet machine:
+
+| Phase | Before | After |
+|---|---|---|
+| Render | 421 µs | 100 µs |
+| Layout | 75 µs | 11 µs |
+| Accessibility label | 66 µs | 5 µs, every fifth tick |
+| Samplers (CPU + memory + network) | 159 µs | 169 µs |
+| **All of flatline's tick code** | **~760 µs** | **~330 µs** |
+
+Whole process, 2 minutes, display on (eul 1.6.2 over the same window):
+
+| | flatline | eul 1.6.2 | Budget |
+|---|---|---|---|
+| Average CPU | 0.11% (was 0.14%) | 1.08% | < 0.1% ❌, just over |
+| Memory | 13 MB | — | < 30 MB ✅ |
+
+About two-thirds of what remains happens outside flatline's own code: Core Animation committing the new layer contents, the timer and run-loop wake-up each second.
 
 ## 10. Accessibility and localization
 
