@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-10-25)
 
 - New app icon: a heartbeat that flatlines into a terminal cursor
 - Offers to start at login the first time it runs from Applications
