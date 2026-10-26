@@ -65,6 +65,9 @@
   .button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   .meta { color: var(--dim); font-size: 13px; }
 
+  .shot { display: flex; justify-content: center; margin: 0 0 48px; }
+  .shot img { width: 412px; max-width: 100%; height: auto; }
+
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 48px; }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
   .card h2 { margin: 0 0 6px; font-size: 12px; letter-spacing: 0.15em; color: var(--phosphor); }
@@ -102,6 +105,10 @@
     <a class="button" href="/download">Download flatline {{VERSION}}</a>
     <span class="meta">{{SIZE}} · macOS 27 or later · Apple Silicon only · signed and notarized</span>
   </div>
+
+  <figure class="shot">
+    <img src="/screenshots/popover.png" width="412" height="645" alt="flatline's popover: CPU, memory and network cards with 60-second traces, per-cluster core load and memory pressure">
+  </figure>
 
   <div class="cards">
     <div class="card"><h2>CPU</h2><p>Total and user/system load, split by Performance and Efficiency clusters, with a per-core grid and load average.</p></div>

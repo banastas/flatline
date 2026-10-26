@@ -4,11 +4,17 @@ A small, fast menu bar monitor for Apple Silicon Macs. It shows **CPU**, **memor
 
 > Keep an eye on the trace. Hope it never goes flat.
 
+<p align="center">
+  <img src="site/screenshots/menubar.png" width="165" alt="flatline in the menu bar: CPU 28%, memory 83%, upload 18.4 Mb/s, download 727 Kb/s">
+  <br><br>
+  <img src="site/screenshots/popover.png" width="412" alt="flatline's popover: CPU, memory and network cards with 60-second traces, per-cluster core load and memory pressure">
+</p>
+
 flatline is a deliberately narrow alternative to all-in-one monitors like [eul](https://github.com/gao-sun/eul). It drops Intel and older macOS support completely, so it can use what Apple Silicon offers (load per Performance and Efficiency core cluster, memory pressure the way macOS calculates it) while staying almost invisible in Activity Monitor.
 
-**Status:** pre-alpha. The app builds and runs; signed releases and auto-updates are next. See the [PRD](PRD.md).
+**Status:** 0.2.1, heading for 1.0. Signed, notarized and self-updating. See the [PRD](PRD.md).
 
-## Features (planned for 1.0)
+## Features
 
 - **CPU**: total, user/system, **per-cluster (P / E)** and per-core load, load average
 - **Memory**: used / app / wired / compressed / cached with Activity Monitor's definitions, **memory pressure**, swap
@@ -26,7 +32,7 @@ flatline is a deliberately narrow alternative to all-in-one monitors like [eul](
 
 ## Install
 
-Not released yet. When it is, downloads will be at **[flatline.banast.as](https://flatline.banast.as)**.
+Download the latest DMG from **[flatline.banast.as](https://flatline.banast.as)**, open it and drag flatline to Applications. It updates itself after that.
 
 ## Building from source
 
