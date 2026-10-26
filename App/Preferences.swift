@@ -56,7 +56,6 @@ final class Preferences {
     var networkStyle: DisplayStyle { didSet { save(networkStyle.rawValue, "networkStyle") } }
     var memoryDisplay: MemoryDisplay { didSet { save(memoryDisplay.rawValue, "memoryDisplay") } }
     var networkUnit: NetworkUnit { didSet { save(networkUnit.rawValue, "networkUnit") } }
-    var severityTint: Bool { didSet { save(severityTint, "severityTint") } }
     var accent: Accent { didSet { save(accent.rawValue, "accent") } }
 
     @ObservationIgnored private let defaults: UserDefaults
@@ -78,7 +77,6 @@ final class Preferences {
         networkStyle = Self.load(defaults, "networkStyle", .text)
         memoryDisplay = Self.load(defaults, "memoryDisplay", .percent)
         networkUnit = Self.load(defaults, "networkUnit", .bytes)
-        severityTint = defaults.bool(forKey: "severityTint")
         accent = Self.load(defaults, "accent", .phosphor)
 
         if !showCPU && !showMemory && !showNetwork { showCPU = true }

@@ -103,7 +103,7 @@ Page size comes from `hw.pagesize` (16 KB on Apple Silicon). Never hard-code it.
   - `text+trace`
 - Network text shows up and down stacked, with arrows (`↑ 34 KB/s` / `↓ 1.2 MB/s`).
 - **Fixed widths**: monospaced digits; each segment's width is sized for its widest possible value, so the bar never moves.
-- Renders monochrome as a template image by default, so it matches the system menu bar. An optional setting tints values by severity (CPU > 80 %, memory pressure warning/critical).
+- Monochrome, in the menu bar's own label color, so it matches the system items. No severity coloring: colored text was hard to read on a see-through menu bar, and the number itself is the signal. Severity colors live in the popover (memory pressure badge).
 - Click opens the popover. Right-click or Control-click opens a small menu (Open, Settings, Check for Updates, Quit).
 - VoiceOver: the item reads a summary such as "CPU 23 percent, memory 61 percent, down 1.2 megabytes per second, up 34 kilobytes per second."
 
@@ -130,7 +130,6 @@ Shown in the popover (an inline settings panel, not a separate window), stored i
 | Display style (per metric) | text, trace, text+trace | text |
 | Network units | bytes/s, bits/s | bytes/s |
 | Memory display | % used, GB used | % used |
-| Severity tint in menu bar | on / off | off |
 | Accent color | phosphor green, cyan, magenta, amber, system | phosphor green |
 | Launch at login | on / off (`SMAppService.mainApp`) | off, with a prompt on first run |
 | Automatic updates | check automatically / download automatically | check automatically, daily |
@@ -206,7 +205,7 @@ Keeping the samplers in a separate package means the parts that matter most for 
 ### 7.4 Menu bar rendering
 
 - `MenuBarRenderer` draws the bar segments into one `NSImage` per tick (Core Graphics / `ImageRenderer`) and assigns it to the status button.
-- The image is a template image unless severity tint is on.
+- The bitmap goes into a `CALayer` inside the status button rather than `button.image`, which made NSButton re-render it on the CPU every tick. Text uses the menu bar's label color, resolved for its current appearance.
 - If nothing visible changed since the last tick (same rounded values and trace pixels), the redraw is skipped.
 
 ### 7.5 Security and distribution

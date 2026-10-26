@@ -94,7 +94,6 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
             _ = preferences.networkStyle
             _ = preferences.memoryDisplay
             _ = preferences.networkUnit
-            _ = preferences.severityTint
             _ = preferences.refreshInterval
         } onChange: { [weak self] in
             Task { @MainActor in

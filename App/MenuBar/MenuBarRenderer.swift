@@ -4,17 +4,13 @@ import FlatlineKit
 /// Draws the status item as one image: fixed-width segments for each enabled metric.
 @MainActor
 enum MenuBarRenderer {
-    enum Severity: Sendable, Equatable {
-        case normal, warning, critical
-    }
-
     enum Piece: Sendable, Equatable {
         /// Small caption over a value, e.g. `CPU` / ` 23%`.
-        case stacked(caption: String, value: String, width: CGFloat, severity: Severity)
+        case stacked(caption: String, value: String, width: CGFloat)
         /// Upload over download.
         case network(up: String, down: String, width: CGFloat)
         /// Mini line graph; values are already scaled to 0...1.
-        case trace(primary: [Double], secondary: [Double]?, severity: Severity)
+        case trace(primary: [Double], secondary: [Double]?)
     }
 
     static let traceWidth: CGFloat = 28
@@ -29,30 +25,26 @@ enum MenuBarRenderer {
     }
 
     static func layout(engine: MetricsEngine, preferences: Preferences) -> Layout {
-        let tinted = preferences.severityTint
         var groups: [[Piece]] = []
 
         if preferences.showCPU {
-            let severity: Severity = tinted ? (engine.cpu.total >= 0.9 ? .critical : engine.cpu.total >= 0.7 ? .warning : .normal) : .normal
             let text = Piece.stacked(
                 caption: "CPU",
                 value: Format.percent(engine.cpu.total).leftPadded(to: 4),
-                width: stackedWidth(caption: "CPU", widest: "100%"),
-                severity: severity
+                width: stackedWidth(caption: "CPU", widest: "100%")
             )
-            let trace = Piece.trace(primary: quantized(engine.cpuHistory.suffix(Int(traceWidth))), secondary: nil, severity: severity)
+            let trace = Piece.trace(primary: quantized(engine.cpuHistory.suffix(Int(traceWidth))), secondary: nil)
             groups.append(pieces(for: preferences.cpuStyle, text: text, trace: trace))
         }
 
         if preferences.showMemory {
             let memory = engine.memory
-            let severity: Severity = tinted ? (memory.pressure == .critical ? .critical : memory.pressure == .warning ? .warning : .normal) : .normal
             let (value, widest) = switch preferences.memoryDisplay {
             case .percent: (Format.percent(memory.usedFraction).leftPadded(to: 4), "100%")
             case .gigabytes: (Format.gigabytesCompact(memory.used), digitTemplate(Format.gigabytesCompact(memory.physical)))
             }
-            let text = Piece.stacked(caption: "MEM", value: value.leftPadded(to: widest.count), width: stackedWidth(caption: "MEM", widest: widest), severity: severity)
-            let trace = Piece.trace(primary: quantized(engine.memoryHistory.suffix(Int(traceWidth))), secondary: nil, severity: severity)
+            let text = Piece.stacked(caption: "MEM", value: value.leftPadded(to: widest.count), width: stackedWidth(caption: "MEM", widest: widest))
+            let trace = Piece.trace(primary: quantized(engine.memoryHistory.suffix(Int(traceWidth))), secondary: nil)
             groups.append(pieces(for: preferences.memoryStyle, text: text, trace: trace))
         }
 
@@ -67,7 +59,7 @@ enum MenuBarRenderer {
             let up = engine.networkOutHistory.suffix(Int(traceWidth))
             // Scale to the window's peak, but never below 10 KB/s so idle chatter stays flat.
             let peak = max(10_000, down.max() ?? 0, up.max() ?? 0)
-            let trace = Piece.trace(primary: quantized(down.map { $0 / peak }), secondary: quantized(up.map { $0 / peak }), severity: .normal)
+            let trace = Piece.trace(primary: quantized(down.map { $0 / peak }), secondary: quantized(up.map { $0 / peak }))
             groups.append(pieces(for: preferences.networkStyle, text: text, trace: trace))
         }
         return Layout(groups: groups)
@@ -147,7 +139,7 @@ enum MenuBarRenderer {
 
     private static func width(of piece: Piece) -> CGFloat {
         switch piece {
-        case let .stacked(_, _, width, _), let .network(_, _, width): width
+        case let .stacked(_, _, width), let .network(_, _, width): width
         case .trace: traceWidth
         }
     }
@@ -182,31 +174,22 @@ enum MenuBarRenderer {
     private static let valueFont = NSFont.monospacedSystemFont(ofSize: 11, weight: .semibold)
     private static let networkFont = NSFont.monospacedSystemFont(ofSize: 9.5, weight: .medium)
 
-    private static func color(_ severity: Severity) -> NSColor {
-        switch severity {
-        case .normal: .labelColor
-        case .warning: .systemOrange
-        case .critical: .systemRed
-        }
-    }
-
     private static func draw(_ piece: Piece, at x: CGFloat, height: CGFloat) {
         let mid = height / 2
         switch piece {
-        case let .stacked(caption, value, width, severity):
-            let captionColor = color(.normal).withAlphaComponent(0.7)
-            drawText(caption, font: captionFont, color: captionColor, centeredIn: width, x: x, y: mid - 11)
-            drawText(value, font: valueFont, color: color(severity), centeredIn: width, x: x, y: mid - 2.5)
+        case let .stacked(caption, value, width):
+            drawText(caption, font: captionFont, color: NSColor.labelColor.withAlphaComponent(0.7), centeredIn: width, x: x, y: mid - 11)
+            drawText(value, font: valueFont, color: .labelColor, centeredIn: width, x: x, y: mid - 2.5)
 
         case let .network(up, down, width):
             let font = networkFont
-            let ink = color(.normal)
+            let ink = NSColor.labelColor
             drawText(up, font: font, color: ink, centeredIn: width, x: x, y: mid - 11)
             drawText(down, font: font, color: ink, centeredIn: width, x: x, y: mid - 0.5)
 
-        case let .trace(primary, secondary, severity):
+        case let .trace(primary, secondary):
             let rect = NSRect(x: x, y: mid - 8, width: traceWidth, height: 16)
-            let ink = color(severity)
+            let ink = NSColor.labelColor
 
             ink.withAlphaComponent(0.25).setFill()
             NSRect(x: rect.minX, y: rect.maxY - 0.5, width: rect.width, height: 0.5).fill()
@@ -219,7 +202,7 @@ enum MenuBarRenderer {
     /// Laid-out lines keyed by font size and text. The same few dozen strings
     /// ("23%", "1.2 MB/s", …) recur constantly, and layout is the expensive part
     /// of drawing text. Lines take their color from the context, so one entry
-    /// serves every appearance and severity.
+    /// serves both light and dark menu bars.
     private static var lineCache: [String: (line: CTLine, width: CGFloat)] = [:]
 
     private static func line(_ string: String, font: NSFont) -> (line: CTLine, width: CGFloat) {

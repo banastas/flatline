@@ -13,7 +13,6 @@ struct SettingsView: View {
                 MetricRow(name: "cpu", isOn: $preferences.showCPU, style: $preferences.cpuStyle, isLast: isLast(preferences.showCPU))
                 MetricRow(name: "mem", isOn: $preferences.showMemory, style: $preferences.memoryStyle, isLast: isLast(preferences.showMemory))
                 MetricRow(name: "net", isOn: $preferences.showNetwork, style: $preferences.networkStyle, isLast: isLast(preferences.showNetwork))
-                Toggle("color values by severity", isOn: $preferences.severityTint)
             }
 
             Section(title: "UNITS") {
