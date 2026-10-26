@@ -17,16 +17,15 @@ enum MenuBarRenderer {
         case trace(primary: [Double], secondary: [Double]?, severity: Severity)
     }
 
-    nonisolated static let traceWidth: CGFloat = 28
-    nonisolated static let gap: CGFloat = 8
-    nonisolated static let innerGap: CGFloat = 4
+    static let traceWidth: CGFloat = 28
+    static let gap: CGFloat = 8
+    static let innerGap: CGFloat = 4
     private static let rateChars = 9 // "12.3 MB/s"
 
     /// Everything that determines the pixels. Equal layouts render identical images,
     /// so the status item can skip redraws when nothing visible changed.
     struct Layout: Equatable {
         var groups: [[Piece]]
-        var template: Bool
     }
 
     static func layout(engine: MetricsEngine, preferences: Preferences) -> Layout {
@@ -71,12 +70,13 @@ enum MenuBarRenderer {
             let trace = Piece.trace(primary: quantized(down.map { $0 / peak }), secondary: quantized(up.map { $0 / peak }), severity: .normal)
             groups.append(pieces(for: preferences.networkStyle, text: text, trace: trace))
         }
-        return Layout(groups: groups, template: !tinted)
+        return Layout(groups: groups)
     }
 
-    static func image(for layout: Layout, appearance: NSAppearance, scale: CGFloat) -> NSImage {
+    /// Renders `layout` at `scale` pixels per point, in the menu bar's own label
+    /// color (resolved for `appearance`) so it can go straight into a layer.
+    static func image(for layout: Layout, appearance: NSAppearance, scale: CGFloat) -> CGImage? {
         let groups = layout.groups
-        let template = layout.template
         let widths = groups.map { group in
             group.map(width(of:)).reduce(0, +) + innerGap * CGFloat(max(0, group.count - 1))
         }
@@ -85,7 +85,7 @@ enum MenuBarRenderer {
 
         let size = NSSize(width: max(totalWidth, 1), height: height)
 
-        // Rasterize now rather than handing AppKit a drawing-handler image: the
+        // Rasterize here rather than handing AppKit a drawing-handler image: the
         // status bar's stylized drawing path crashes CoreText on macOS 27 when
         // it lays out text inside a handler.
         guard let bitmap = NSBitmapImageRep(
@@ -99,7 +99,7 @@ enum MenuBarRenderer {
             colorSpaceName: .deviceRGB,
             bytesPerRow: 0,
             bitsPerPixel: 0
-        ), let context = NSGraphicsContext(bitmapImageRep: bitmap) else { return NSImage(size: size) }
+        ), let context = NSGraphicsContext(bitmapImageRep: bitmap) else { return nil }
         bitmap.size = size
 
         NSGraphicsContext.saveGraphicsState()
@@ -112,7 +112,7 @@ enum MenuBarRenderer {
             for group in groups {
                 for (index, piece) in group.enumerated() {
                     if index > 0 { x += innerGap }
-                    draw(piece, at: x, height: height, template: template)
+                    draw(piece, at: x, height: height)
                     x += width(of: piece)
                 }
                 x += gap
@@ -120,10 +120,7 @@ enum MenuBarRenderer {
         }
         NSGraphicsContext.restoreGraphicsState()
 
-        let image = NSImage(size: size)
-        image.addRepresentation(bitmap)
-        image.isTemplate = template
-        return image
+        return bitmap.cgImage
     }
 
     static func accessibilityLabel(engine: MetricsEngine, preferences: Preferences) -> String {
@@ -148,7 +145,7 @@ enum MenuBarRenderer {
         }
     }
 
-    nonisolated private static func width(of piece: Piece) -> CGFloat {
+    private static func width(of piece: Piece) -> CGFloat {
         switch piece {
         case let .stacked(_, _, width, _), let .network(_, _, width): width
         case .trace: traceWidth
@@ -179,39 +176,37 @@ enum MenuBarRenderer {
         String(string.map { $0.isNumber ? "8" : $0 })
     }
 
-    // MARK: - Drawing (runs whenever AppKit draws the image)
+    // MARK: - Drawing
 
-    // NSFont is immutable; creating one per draw is what made each tick expensive.
-    nonisolated(unsafe) private static let captionFont = NSFont.monospacedSystemFont(ofSize: 8, weight: .medium)
-    nonisolated(unsafe) private static let valueFont = NSFont.monospacedSystemFont(ofSize: 11, weight: .semibold)
-    nonisolated(unsafe) private static let networkFont = NSFont.monospacedSystemFont(ofSize: 9.5, weight: .medium)
+    private static let captionFont = NSFont.monospacedSystemFont(ofSize: 8, weight: .medium)
+    private static let valueFont = NSFont.monospacedSystemFont(ofSize: 11, weight: .semibold)
+    private static let networkFont = NSFont.monospacedSystemFont(ofSize: 9.5, weight: .medium)
 
-    nonisolated private static func color(_ severity: Severity, template: Bool) -> NSColor {
-        guard !template else { return .black }
-        return switch severity {
+    private static func color(_ severity: Severity) -> NSColor {
+        switch severity {
         case .normal: .labelColor
         case .warning: .systemOrange
         case .critical: .systemRed
         }
     }
 
-    nonisolated private static func draw(_ piece: Piece, at x: CGFloat, height: CGFloat, template: Bool) {
+    private static func draw(_ piece: Piece, at x: CGFloat, height: CGFloat) {
         let mid = height / 2
         switch piece {
         case let .stacked(caption, value, width, severity):
-            let captionColor = color(.normal, template: template).withAlphaComponent(0.7)
+            let captionColor = color(.normal).withAlphaComponent(0.7)
             drawText(caption, font: captionFont, color: captionColor, centeredIn: width, x: x, y: mid - 11)
-            drawText(value, font: valueFont, color: color(severity, template: template), centeredIn: width, x: x, y: mid - 2.5)
+            drawText(value, font: valueFont, color: color(severity), centeredIn: width, x: x, y: mid - 2.5)
 
         case let .network(up, down, width):
             let font = networkFont
-            let ink = color(.normal, template: template)
+            let ink = color(.normal)
             drawText(up, font: font, color: ink, centeredIn: width, x: x, y: mid - 11)
             drawText(down, font: font, color: ink, centeredIn: width, x: x, y: mid - 0.5)
 
         case let .trace(primary, secondary, severity):
             let rect = NSRect(x: x, y: mid - 8, width: traceWidth, height: 16)
-            let ink = color(severity, template: template)
+            let ink = color(severity)
 
             ink.withAlphaComponent(0.25).setFill()
             NSRect(x: rect.minX, y: rect.maxY - 0.5, width: rect.width, height: 0.5).fill()
@@ -221,12 +216,40 @@ enum MenuBarRenderer {
         }
     }
 
-    nonisolated private static func drawText(_ string: String, font: NSFont, color: NSColor, centeredIn width: CGFloat, x: CGFloat, y: CGFloat) {
-        let text = NSAttributedString(string: string, attributes: [.font: font, .foregroundColor: color])
-        text.draw(at: NSPoint(x: x + (width - text.size().width) / 2, y: y))
+    /// Laid-out lines keyed by font size and text. The same few dozen strings
+    /// ("23%", "1.2 MB/s", …) recur constantly, and layout is the expensive part
+    /// of drawing text. Lines take their color from the context, so one entry
+    /// serves every appearance and severity.
+    private static var lineCache: [String: (line: CTLine, width: CGFloat)] = [:]
+
+    private static func line(_ string: String, font: NSFont) -> (line: CTLine, width: CGFloat) {
+        let key = "\(font.pointSize)|\(string)"
+        if let cached = lineCache[key] { return cached }
+        if lineCache.count >= 512 { lineCache.removeAll(keepingCapacity: true) }
+        let attributed = NSAttributedString(string: string, attributes: [
+            .font: font,
+            NSAttributedString.Key(kCTForegroundColorFromContextAttributeName as String): true,
+        ])
+        let line = CTLineCreateWithAttributedString(attributed)
+        let entry = (line, CGFloat(CTLineGetTypographicBounds(line, nil, nil, nil)))
+        lineCache[key] = entry
+        return entry
     }
 
-    nonisolated private static func stroke(_ values: [Double], in rect: NSRect, color: NSColor) {
+    /// Draws `string` with its line box's top edge at `y`.
+    private static func drawText(_ string: String, font: NSFont, color: NSColor, centeredIn width: CGFloat, x: CGFloat, y: CGFloat) {
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        let (line, lineWidth) = line(string, font: font)
+        context.saveGState()
+        context.setFillColor(color.cgColor)
+        // The context is flipped; flip glyphs back upright.
+        context.textMatrix = CGAffineTransform(scaleX: 1, y: -1)
+        context.textPosition = CGPoint(x: x + (width - lineWidth) / 2, y: y + font.ascender)
+        CTLineDraw(line, context)
+        context.restoreGState()
+    }
+
+    private static func stroke(_ values: [Double], in rect: NSRect, color: NSColor) {
         guard values.count > 1 else { return }
         let step = rect.width / CGFloat(values.count - 1)
         let path = NSBezierPath()

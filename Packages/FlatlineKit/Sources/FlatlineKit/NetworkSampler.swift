@@ -11,18 +11,29 @@ public struct NetworkRates: Sendable, Equatable {
     }
 }
 
-/// Reads per-interface byte counters via `NET_RT_IFLIST2`, whose `if_data64`
-/// counters are 64-bit. (The 32-bit `getifaddrs` counters wrap at 4 GiB.)
+/// Reads 64-bit per-interface byte counters. (The 32-bit `getifaddrs`
+/// counters wrap at 4 GiB.)
+///
+/// Listing every interface (`NET_RT_IFLIST2`) costs 0.5–3.5 ms because the
+/// kernel serializes all of them, including dozens of `utun`, `llw` and `anpi`
+/// interfaces. So the list is only rebuilt when the system's interface count
+/// changes (or every `discoveryInterval` as a backstop); each tick reads just
+/// the `en*` interfaces through `ifmibdata`, at under a microsecond each.
 public final class NetworkSampler {
     private struct Counters {
         var bytesIn: UInt64
         var bytesOut: UInt64
     }
 
+    public static let discoveryInterval: Duration = .seconds(300)
+
     private var previous: [UInt16: Counters] = [:]
     private var lastSample: ContinuousClock.Instant?
-    private var buffer: [UInt8] = []
+    private var lastDiscovery: ContinuousClock.Instant?
+    private var candidates: [UInt16] = []
+    private var interfaceCount: Int32 = -1
     private var names: [UInt16: String] = [:]
+    private var listBuffer: [UInt8] = []
 
     /// Bytes counted since launch or the last `resetSession()`.
     public private(set) var sessionIn: UInt64 = 0
@@ -43,6 +54,12 @@ public final class NetworkSampler {
 
     /// Rates since the previous call. The first call returns zeros.
     public func sample(now: ContinuousClock.Instant = .now) -> NetworkRates {
+        let count = Self.systemInterfaceCount()
+        if count != interfaceCount || lastDiscovery.map({ now - $0 >= Self.discoveryInterval }) ?? true {
+            discoverInterfaces()
+            interfaceCount = count
+            lastDiscovery = now
+        }
         let current = readCounters()
         defer {
             previous = current
@@ -67,15 +84,44 @@ public final class NetworkSampler {
     }
 
     private func readCounters() -> [UInt16: Counters] {
+        var result: [UInt16: Counters] = [:]
+        for index in candidates {
+            var mib: [Int32] = [CTL_NET, PF_LINK, NETLINK_GENERIC, IFMIB_IFDATA, Int32(index), IFDATA_GENERAL]
+            var data = ifmibdata()
+            var size = MemoryLayout<ifmibdata>.size
+            guard sysctl(&mib, u_int(mib.count), &data, &size, nil, 0) == 0 else {
+                // The interface went away; rescan on the next tick.
+                lastDiscovery = nil
+                continue
+            }
+            let flags = Int32(truncatingIfNeeded: data.ifmd_flags)
+            guard Self.shouldCount(name: names[index] ?? "", flags: flags) else { continue }
+            result[index] = Counters(bytesIn: data.ifmd_data.ifi_ibytes, bytesOut: data.ifmd_data.ifi_obytes)
+        }
+        return result
+    }
+
+    private static func systemInterfaceCount() -> Int32 {
+        var mib: [Int32] = [CTL_NET, PF_LINK, NETLINK_GENERIC, IFMIB_SYSTEM, IFMIB_IFCOUNT]
+        var count: Int32 = 0
+        var size = MemoryLayout<Int32>.size
+        return sysctl(&mib, u_int(mib.count), &count, &size, nil, 0) == 0 ? count : -1
+    }
+
+    /// Refreshes the indices of `en*` interfaces, up or not (link state is
+    /// checked every tick).
+    private func discoverInterfaces() {
         var mib: [Int32] = [CTL_NET, PF_ROUTE, 0, 0, NET_RT_IFLIST2, 0]
         var length = 0
-        guard sysctl(&mib, u_int(mib.count), nil, &length, nil, 0) == 0, length > 0 else { return [:] }
+        guard sysctl(&mib, u_int(mib.count), nil, &length, nil, 0) == 0, length > 0 else { return }
         // Leave room for interfaces that appear between the two calls.
-        if buffer.count < length { buffer = [UInt8](repeating: 0, count: length + 1024) }
-        guard sysctl(&mib, u_int(mib.count), &buffer, &length, nil, 0) == 0 else { return [:] }
+        if listBuffer.count < length { listBuffer = [UInt8](repeating: 0, count: length + 1024) }
+        guard sysctl(&mib, u_int(mib.count), &listBuffer, &length, nil, 0) == 0 else { return }
 
-        var result: [UInt16: Counters] = [:]
-        buffer.withUnsafeBytes { raw in
+        // Indices can be reused by a different interface after a removal.
+        names.removeAll(keepingCapacity: true)
+        var found: [UInt16] = []
+        listBuffer.withUnsafeBytes { raw in
             var offset = 0
             while offset + MemoryLayout<if_msghdr>.size <= length {
                 let header = raw.loadUnaligned(fromByteOffset: offset, as: if_msghdr.self)
@@ -83,14 +129,12 @@ public final class NetworkSampler {
                 guard messageLength > 0 else { break }
                 defer { offset += messageLength }
 
-                guard header.ifm_type == RTM_IFINFO2,
-                      offset + MemoryLayout<if_msghdr2>.size <= length else { continue }
-                let info = raw.loadUnaligned(fromByteOffset: offset, as: if_msghdr2.self)
-                guard Self.shouldCount(name: name(for: info.ifm_index), flags: info.ifm_flags) else { continue }
-                result[info.ifm_index] = Counters(bytesIn: info.ifm_data.ifi_ibytes, bytesOut: info.ifm_data.ifi_obytes)
+                guard header.ifm_type == RTM_IFINFO2 else { continue }
+                let name = name(for: header.ifm_index)
+                if name.hasPrefix("en") { found.append(header.ifm_index) }
             }
         }
-        return result
+        candidates = found
     }
 
     private func name(for index: UInt16) -> String {

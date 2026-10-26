@@ -18,6 +18,13 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
         var scale: CGFloat
     }
     private var lastRender: RenderKey?
+    private var lastAccessibilityLabel: String?
+
+    /// Holds the rendered bitmap. Setting `button.image` instead makes NSButton
+    /// re-render the image on the CPU every tick, which was about 2 ms of work;
+    /// a layer's contents go straight to the window server.
+    private let contentLayer = CALayer()
+    private static let horizontalPadding: CGFloat = 4
 
     init(engine: MetricsEngine, preferences: Preferences) {
         self.engine = engine
@@ -29,7 +36,9 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
             button.target = self
             button.action = #selector(handleClick(_:))
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
-            button.imagePosition = .imageOnly
+            button.wantsLayer = true
+            contentLayer.actions = ["contents": NSNull(), "bounds": NSNull(), "position": NSNull()]
+            button.layer?.addSublayer(contentLayer)
         }
 
         popover.behavior = .transient
@@ -43,16 +52,35 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
 
     private func redraw() {
         guard let button = statusItem.button else { return }
-        button.setAccessibilityLabel(MenuBarRenderer.accessibilityLabel(engine: engine, preferences: preferences))
+        Profiler.measure("a11y") {
+            let label = MenuBarRenderer.accessibilityLabel(engine: engine, preferences: preferences)
+            if label != lastAccessibilityLabel {
+                lastAccessibilityLabel = label
+                button.setAccessibilityLabel(label)
+            }
+        }
 
-        let layout = MenuBarRenderer.layout(engine: engine, preferences: preferences)
+        let layout = Profiler.measure("layout") { MenuBarRenderer.layout(engine: engine, preferences: preferences) }
         let appearance = button.effectiveAppearance
         let scale = button.window?.backingScaleFactor ?? 2
         let key = RenderKey(layout: layout, appearance: appearance.name, scale: scale)
         guard key != lastRender else { return }
         lastRender = key
 
-        button.image = MenuBarRenderer.image(for: layout, appearance: appearance, scale: scale)
+        guard let image = Profiler.measure("render", { MenuBarRenderer.image(for: layout, appearance: appearance, scale: scale) }) else { return }
+        Profiler.measure("setImage") {
+            let size = CGSize(width: CGFloat(image.width) / scale, height: CGFloat(image.height) / scale)
+            let length = size.width + 2 * Self.horizontalPadding
+            if statusItem.length != length { statusItem.length = length }
+            contentLayer.contentsScale = scale
+            contentLayer.frame = CGRect(
+                x: Self.horizontalPadding,
+                y: ((button.bounds.height - size.height) / 2).rounded(),
+                width: size.width,
+                height: size.height
+            )
+            contentLayer.contents = image
+        }
     }
 
     /// Redraw (and retime) as soon as a setting changes instead of waiting for the next tick.

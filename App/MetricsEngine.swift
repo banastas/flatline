@@ -80,20 +80,26 @@ final class MetricsEngine {
     }
 
     private func tick() {
-        cpu = cpuSampler.sample()
-        memory = memorySampler.sample()
-        network = networkSampler.sample()
-        sessionIn = networkSampler.sessionIn
-        sessionOut = networkSampler.sessionOut
+        let cpu = Profiler.measure("cpuSample") { cpuSampler.sample() }
+        let memory = Profiler.measure("memSample") { memorySampler.sample() }
+        let network = Profiler.measure("netSample") { networkSampler.sample() }
+        Profiler.measure("publish") {
+            self.cpu = cpu
+            self.memory = memory
+            self.network = network
+            sessionIn = networkSampler.sessionIn
+            sessionOut = networkSampler.sessionOut
 
-        cpuHistory.append(cpu.total)
-        memoryHistory.append(memory.usedFraction)
-        networkInHistory.append(network.bytesInPerSecond)
-        networkOutHistory.append(network.bytesOutPerSecond)
+            cpuHistory.append(cpu.total)
+            memoryHistory.append(memory.usedFraction)
+            networkInHistory.append(network.bytesInPerSecond)
+            networkOutHistory.append(network.bytesOutPerSecond)
+        }
 
         tickCount += 1
         if detailsVisible, tickCount % 5 == 0 { refreshDetails() }
         onTick?()
+        Profiler.endTick()
     }
 
     private func refreshDetails() {

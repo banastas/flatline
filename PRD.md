@@ -228,7 +228,7 @@ Measured on an M-series Mac at the default 1 s refresh, popover closed:
 | Energy Impact (Activity Monitor) | ≈ 0 when popover closed |
 | Popover open → first frame | < 50 ms |
 
-These budgets are checked before each release with Instruments (Time Profiler, Allocations, Energy Log).
+These budgets are checked before each release with Instruments (Time Profiler, Allocations, Energy Log) and with the built-in tick profiler: run `flatline.app/Contents/MacOS/flatline` with `FLATLINE_PROFILE=1` to print the average CPU time of each tick phase. Compare total process CPU time (`ps -o time`) over a few minutes against the same window for a reference app.
 
 ## 9. Accuracy acceptance criteria
 
