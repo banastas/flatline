@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.1 |
+| **Status** | Draft v0.2: M0–M4 built |
 | **Owner** | Bill Anastas |
 | **Last updated** | 2026-10-25 |
 | **Repo** | [banastas/flatline](https://github.com/banastas/flatline) |
@@ -260,11 +260,18 @@ These budgets are checked before each release with Instruments (Time Profiler, A
 | M6 | Updates + site | Sparkle wired up; `site/` deployed to flatline.banast.as with appcast; an update tested end to end from 0.9 to 0.9.1 |
 | M7 | 1.0 | Performance budgets (§8) and accuracy criteria (§9) verified; README screenshots; tagged release |
 
-## 12. Open questions
+## 12. Decisions
 
-1. **Apple Developer account**: a Developer ID certificate is required for notarization and for Sparkle updates to install without Gatekeeper prompts. Is one available?
-2. **Hosting for flatline.banast.as**: Vercel or Cloudflare Pages? Either can serve static files; the appcast and DMGs only need HTTPS and correct MIME types.
-3. **License**: MIT, or something else? Should the repo stay private until 1.0?
-4. **Top processes**: a "top 5 by CPU" list in the popover would be useful, but `proc_pid_rusage` can't read root-owned processes without a privileged helper, so the list would be incomplete. Leave it out of 1.0?
-5. **Default network unit**: bytes/s (like Activity Monitor) or bits/s (like ISP speeds)?
-6. **Distribution through Homebrew**: add a `brew install --cask flatline` tap after 1.0?
+| Question | Decision (2026-10-25) |
+|---|---|
+| Apple Developer account | Yes. Releases are signed with **Developer ID Application (team `F87BNUZAVJ`)** and notarized with `notarytool`, using a keychain profile named `flatline`. |
+| Hosting for flatline.banast.as | **Cloudflare Pages** for the site and `appcast.xml`. DMGs go there too while they fit Pages' per-file limit; move them to R2 if not. |
+| License | **MIT**. |
+| Menu bar severity colors | **Removed**; colored text was hard to read on a see-through menu bar (see §6.2). |
+
+## 13. Open questions
+
+1. **Repo visibility**: keep it private until 1.0, or open it now?
+2. **Top processes**: a "top 5 by CPU" list in the popover would be useful, but `proc_pid_rusage` can't read root-owned processes without a privileged helper, so the list would be incomplete. Leave it out of 1.0?
+3. **Default network unit**: bytes/s (like Activity Monitor) or bits/s (like ISP speeds)?
+4. **Distribution through Homebrew**: add a `brew install --cask flatline` tap after 1.0?
