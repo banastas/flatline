@@ -270,8 +270,9 @@ These budgets are checked before each release with Instruments (Time Profiler, A
 | Menu bar severity colors | **Removed**; colored text was hard to read on a see-through menu bar (see §6.2). |
 | Repo visibility | **Private until 1.0**, public with the 1.0 release. |
 | Top processes in the popover | **Not in 1.0.** Without a privileged helper the list would miss root-owned processes. |
+| Default network unit | **bytes/s**, matching Activity Monitor, Safari and Finder; bits/s is a setting. |
 | Homebrew | **Offer a cask after 1.0** (`brew install --cask flatline`), pointing at the DMG on flatline.banast.as. |
 
 ## 13. Open questions
 
-1. **Default network unit**: bytes/s (like Activity Monitor) or bits/s (like ISP speeds)?
+None right now.
