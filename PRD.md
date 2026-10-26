@@ -268,10 +268,10 @@ These budgets are checked before each release with Instruments (Time Profiler, A
 | Hosting for flatline.banast.as | **Cloudflare**, as a static-assets Worker (`flatline-banast-as`; wrangler now routes new Pages projects there). Site, appcast and DMGs together; the per-file limit is 25 MiB, so move DMGs to R2 if they ever exceed it. |
 | License | **MIT**. |
 | Menu bar severity colors | **Removed**; colored text was hard to read on a see-through menu bar (see §6.2). |
+| Repo visibility | **Private until 1.0**, public with the 1.0 release. |
+| Top processes in the popover | **Not in 1.0.** Without a privileged helper the list would miss root-owned processes. |
+| Homebrew | **Offer a cask after 1.0** (`brew install --cask flatline`), pointing at the DMG on flatline.banast.as. |
 
 ## 13. Open questions
 
-1. **Repo visibility**: keep it private until 1.0, or open it now?
-2. **Top processes**: a "top 5 by CPU" list in the popover would be useful, but `proc_pid_rusage` can't read root-owned processes without a privileged helper, so the list would be incomplete. Leave it out of 1.0?
-3. **Default network unit**: bytes/s (like Activity Monitor) or bits/s (like ISP speeds)?
-4. **Distribution through Homebrew**: add a `brew install --cask flatline` tap after 1.0?
+1. **Default network unit**: bytes/s (like Activity Monitor) or bits/s (like ISP speeds)?
