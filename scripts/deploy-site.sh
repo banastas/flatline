@@ -3,7 +3,8 @@
 # and every release in releases/ (DMGs, deltas, notes), as the static-assets
 # Worker configured in wrangler.jsonc.
 #
-#   scripts/deploy-site.sh
+#   scripts/deploy-site.sh              assemble dist/site and deploy it
+#   scripts/deploy-site.sh --no-deploy  assemble only, to preview locally
 #
 # Uses wrangler's Cloudflare login (npx wrangler login).
 set -euo pipefail
@@ -33,5 +34,9 @@ VERSION=$LATEST SIZE=$SIZE NOTES=$(cat "$RELEASES/flatline-$LATEST.html") perl -
 ' "$OUT/index.html"
 echo "/download /releases/flatline-$LATEST.dmg 302" > "$OUT/_redirects"
 
+if [[ ${1:-} == --no-deploy ]]; then
+    echo "==> Assembled $OUT for flatline $LATEST (not deployed)"
+    exit 0
+fi
 echo "==> Deploying flatline $LATEST"
 "${WRANGLER[@]}" deploy
