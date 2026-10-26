@@ -44,6 +44,17 @@ Sampler unit tests run without Xcode:
 swift test --package-path Packages/FlatlineKit
 ```
 
+Debug builds are ad-hoc signed and run on any Mac. Release builds are signed with the maintainer's Developer ID.
+
+## Releasing
+
+```bash
+scripts/bump-version.sh 0.2.0   # sets the version, increments the build number
+scripts/release.sh              # test, archive, sign, notarize, staple → dist/flatline-0.2.0.dmg
+```
+
+`release.sh --skip-notarize` makes a signed but un-notarized DMG for a quick check. Notarization reads Apple ID credentials from a keychain profile, created once with `xcrun notarytool store-credentials flatline --team-id F87BNUZAVJ`.
+
 ## License
 
 [MIT](LICENSE)
