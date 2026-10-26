@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v0.5: M0–M6 done, 0.2.0 live, accuracy verified (§9.1) |
+| **Status** | v1.0: M0–M7 done; 1.0.0 released 2026-10-26 |
 | **Owner** | Bill Anastas |
 | **Last updated** | 2026-10-25 |
 | **Repo** | [banastas/flatline](https://github.com/banastas/flatline) |

@@ -3,6 +3,32 @@
     <channel>
         <title>flatline</title>
         <item>
+            <title>1.0.0</title>
+            <pubDate>Mon, 26 Oct 2026 08:59:47 -0700</pubDate>
+            <link>https://flatline.banast.as</link>
+            <sparkle:version>5</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<p>The first stable release. If you're on 0.2.1, the app is unchanged; this marks it as 1.0.</p>
+<ul>
+  <li>CPU: total load, user/system split, each Performance and Efficiency cluster, a per-core grid and the load average</li>
+  <li>Memory: app, wired, compressed and cached memory with Activity Monitor's definitions, memory pressure and swap</li>
+  <li>Network: upload and download from 64-bit counters, session totals and the active interface</li>
+  <li>Menu bar shows text, a mini trace or both, at a fixed width so it never shifts</li>
+  <li>Readings checked against top, Activity Monitor and netstat</li>
+  <li>About 0.1% CPU and 13 MB of memory at idle</li>
+  <li>Signed, notarized and updated automatically</li>
+</ul>
+]]></description>
+            <enclosure url="https://flatline.banast.as/releases/flatline-1.0.0.dmg" length="3416009" type="application/octet-stream" sparkle:edSignature="NzrpActCOl3FsRvGB2Ys+xQL0v2LkHscJhQwBeSOPL7cTfehUB3e5dUxIxXtvFqXl97v4u5ZL7g6ICBA4ZBVAg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://flatline.banast.as/releases/flatline5-4.delta" sparkle:deltaFrom="4" length="12722" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3FkIczmDZUh3y+RRij0hj+T7S6NhmOuDlOc6aihqH3Pf0lagMUgPHPUhJGrtNC6ZPJMkm8y95ObG/B6se4FFAQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline5-3.delta" sparkle:deltaFrom="3" length="59986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="R0vJutM8wCQBfvrLzXjMDi0NR2S1KMn1H+OaxGQm4Uswcs+ZcNbTTS4zs3qXzW6jFv5K+js1/1jvF34e38ssCQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline5-2.delta" sparkle:deltaFrom="2" length="1239598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dO/k23omXS0yci52R5m9fb+5DO8jIT9TuV8Fg7z19ZZTnDdI+Y51CBHCIB3KHuvC1HiLy4x1SWezvMGvtLxdBA=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline5-1.delta" sparkle:deltaFrom="1" length="1239886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3OwxgoF/kxg3OnAgsnwI2379b482Kr108BnDZgChJRZgto7K2N6EDAimebYoGrGcJxY3O392iscyd8pBpiY/Bw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>0.2.1</title>
             <pubDate>Mon, 26 Oct 2026 07:50:17 -0700</pubDate>
             <link>https://flatline.banast.as</link>
@@ -38,22 +64,6 @@
             <sparkle:deltas>
                 <enclosure url="https://flatline.banast.as/releases/flatline3-2.delta" sparkle:deltaFrom="2" length="1213114" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="tDPjTAi3Mmznqtv870noqyi/8xicAZhln/dH1sPi45Yb6cNEpbcuzU/S9IVmkt8v5VvkKb+sPDXf1Rm9K67mCA=="/>
                 <enclosure url="https://flatline.banast.as/releases/flatline3-1.delta" sparkle:deltaFrom="1" length="1213154" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nsFoNCXNGMDlS/y4hLMwVef4igwYoFVJb/TRXCUutmSTAgAsFaNbcAD44MVH2x7fUzZvXnHn3jP5uUfry3PPBw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>0.1.1</title>
-            <pubDate>Sun, 25 Oct 2026 22:23:28 -0700</pubDate>
-            <link>https://flatline.banast.as</link>
-            <sparkle:version>2</sparkle:version>
-            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<ul>
-  <li>First release delivered through automatic updates; no other changes.</li>
-</ul>
-]]></description>
-            <enclosure url="https://flatline.banast.as/releases/flatline-0.1.1.dmg" length="1276009" type="application/octet-stream" sparkle:edSignature="84y+EEx48iaA2q1CNwPH6MpOT2fURvmCjIKQOVlTS1vqHiINFzfEqNx04mxM9NbHflaQWYPFDgybaP38agyuBQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://flatline.banast.as/releases/flatline2-1.delta" sparkle:deltaFrom="1" length="10878" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zqbMQ0LkHHaCurNjI4THXY/sTs89K7jsm16zHxMeQ6zNGZ3Iol/8WhOFd/y0oEVvusce8NnLIGQBc6gNyvAfAg=="/>
             </sparkle:deltas>
         </item>
     </channel>

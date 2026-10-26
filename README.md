@@ -15,7 +15,7 @@ A small, fast menu bar monitor for Apple Silicon Macs. It shows **CPU**, **memor
 
 flatline is a deliberately narrow alternative to all-in-one monitors like [eul](https://github.com/gao-sun/eul). It drops Intel and older macOS support completely, so it can use what Apple Silicon offers (load per Performance and Efficiency core cluster, memory pressure the way macOS calculates it) while staying almost invisible in Activity Monitor.
 
-**Status:** 0.2.1, heading for 1.0. Signed, notarized and self-updating. See the [PRD](PRD.md).
+**Status:** 1.0. Signed, notarized and self-updating. See the [PRD](PRD.md) and [changelog](CHANGELOG.md).
 
 ## Features
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0 (2026-10-26)
+
+The first stable release. If you're on 0.2.1, the app is unchanged; this marks it as 1.0.
+
+- CPU: total load, user/system split, each Performance and Efficiency cluster, a per-core grid and the load average
+- Memory: app, wired, compressed and cached memory with Activity Monitor's definitions, memory pressure and swap
+- Network: upload and download from 64-bit counters, session totals and the active interface
+- Menu bar shows text, a mini trace or both, at a fixed width so it never shifts
+- Readings checked against top, Activity Monitor and netstat
+- About 0.1% CPU and 13 MB of memory at idle
+- Signed, notarized and updated automatically
+
 ## 0.2.1 (2026-10-26)
 
 - Uses less CPU when idle: about 0.1%, down from 0.14%. Drawing the menu bar is about four times cheaper.
