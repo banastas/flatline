@@ -13,7 +13,7 @@ A small, fast menu bar monitor for Apple Silicon Macs. It shows **CPU**, **memor
   <img src="site/screenshots/popover.png" width="412" alt="flatline's popover: CPU, memory and network cards with 60-second traces, per-cluster core load and memory pressure">
 </p>
 
-flatline is a deliberately narrow alternative to all-in-one monitors like [eul](https://github.com/gao-sun/eul). It drops Intel and older macOS support completely, so it can use what Apple Silicon offers (load per Performance and Efficiency core cluster, memory pressure the way macOS calculates it) while staying almost invisible in Activity Monitor.
+flatline is an alternative to all-in-one monitors like [eul](https://github.com/gao-sun/eul) that tracks only these three things. It doesn't support Intel Macs or older versions of macOS, so it can use what Apple Silicon offers: load per Performance and Efficiency core cluster, and memory pressure the way macOS calculates it. It uses about 0.1% CPU at idle.
 
 **Status:** 1.0. Signed, notarized and self-updating. See the [PRD](PRD.md) and [changelog](CHANGELOG.md).
 
@@ -22,7 +22,7 @@ flatline is a deliberately narrow alternative to all-in-one monitors like [eul](
 - **CPU**: total, user/system, **per-cluster (P / E)** and per-core load, load average
 - **Memory**: used / app / wired / compressed / cached with Activity Monitor's definitions, **memory pressure**, swap
 - **Network**: live down/up rates using 64-bit counters (no false spikes at 4 GiB), session totals, active interface
-- Fixed-width menu bar that doesn't jump around, with `text`, `trace`, or `text+trace` styles
+- Menu bar item that keeps the same width as the numbers change, with `text`, `trace`, or `text+trace` styles
 - Popover with 60-second traces and a per-core grid
 - Terminal-style monospaced look with a phosphor accent; native light and dark mode
 - Launch at login, automatic updates via [Sparkle](https://sparkle-project.org)
