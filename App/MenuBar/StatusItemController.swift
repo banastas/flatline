@@ -10,7 +10,9 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
     private let preferences: Preferences
     private let updater: Updater
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-    private let popover = NSPopover()
+    /// Created per opening and released on close: a kept NSPopover holds on to
+    /// its window and backing surfaces (several MB) long after it's hidden.
+    private var popover: NSPopover?
     private let popoverState = PopoverState()
 
     private struct RenderKey: Equatable {
@@ -42,10 +44,6 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
             contentLayer.actions = ["contents": NSNull(), "bounds": NSNull(), "position": NSNull()]
             button.layer?.addSublayer(contentLayer)
         }
-
-        popover.behavior = .transient
-        popover.animates = false
-        popover.delegate = self
 
         engine.onTick = { [weak self] in self?.redraw() }
         observePreferences()
@@ -119,7 +117,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
     }
 
     private func togglePopover(settings: Bool) {
-        if popover.isShown {
+        if let popover, popover.isShown {
             popover.performClose(nil)
             return
         }
@@ -128,17 +126,33 @@ final class StatusItemController: NSObject, NSPopoverDelegate, NSMenuDelegate {
         popoverState.showingSettings = settings
         let controller = NSHostingController(rootView: PopoverView(engine: engine, preferences: preferences, updater: updater, state: popoverState))
         controller.sizingOptions = .preferredContentSize
+
+        let popover = NSPopover()
+        popover.behavior = .transient
+        popover.animates = false
+        popover.delegate = self
         popover.contentViewController = controller
+        self.popover = popover
 
         engine.setDetailsVisible(true)
         NSApp.activate()
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        // Without key status the popover draws its controls inactive: switches
+        // and segmented pickers turn gray instead of taking the accent color.
+        controller.view.window?.makeKey()
     }
 
     func popoverDidClose(_ notification: Notification) {
-        // Drop the SwiftUI tree so nothing renders while the popover is closed.
-        popover.contentViewController = nil
         engine.setDetailsVisible(false)
+        // Release the popover, its window and the SwiftUI tree once AppKit has
+        // finished closing it, then hand the freed pages back to the system.
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.popover?.isShown != true else { return }
+            self.popover = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                malloc_zone_pressure_relief(nil, 0)
+            }
+        }
     }
 
     private func showMenu() {

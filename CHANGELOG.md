@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 (unreleased)
+
+- New app icon: a heartbeat that flatlines into a terminal cursor
+- Offers to start at login the first time it runs from Applications
+- Settings switches and pickers now use your accent color
+- Uses about 5 MB less memory after the popover closes
+
 ## 0.1.1 (2026-10-25)
 
 - First release delivered through automatic updates; no other changes.
