@@ -5,7 +5,10 @@ A small, fast menu bar monitor for Apple Silicon Macs. It shows **CPU**, **memor
 > Keep an eye on the trace. Hope it never goes flat.
 
 <p align="center">
-  <img src="site/screenshots/menubar.png" width="165" alt="flatline in the menu bar: CPU 28%, memory 83%, upload 18.4 Mb/s, download 727 Kb/s">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="site/screenshots/menubar-dark.png">
+    <img src="site/screenshots/menubar-light.png" width="137" alt="flatline in the menu bar: CPU 31%, memory 87%, upload 6.6 Mb/s, download 3.2 Mb/s">
+  </picture>
   <br><br>
   <img src="site/screenshots/popover.png" width="412" alt="flatline's popover: CPU, memory and network cards with 60-second traces, per-cluster core load and memory pressure">
 </p>
