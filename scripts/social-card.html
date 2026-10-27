@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  GitHub social preview for the repo (1280×640). GitHub crops up to 40pt
+  (80px here) from each edge, so everything that matters sits inside .safe.
+
+  Render to site/social.png with any Chromium browser:
+    "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" --headless \
+      --hide-scrollbars --force-device-scale-factor=1 --window-size=1280,640 \
+      --screenshot=site/social.png scripts/social-card.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>flatline social card</title>
+<style>
+  :root {
+    --bg: #07090a;
+    --line: #1b2523;
+    --text: #d9e4de;
+    --dim: #82948d;
+    --faint: #56665f;
+    --phosphor: #33f273;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    position: relative;
+    background:
+      radial-gradient(700px 460px at 82% 45%, rgb(51 242 115 / 0.13), transparent 70%),
+      radial-gradient(900px 500px at 10% 110%, rgb(51 242 115 / 0.06), transparent 70%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The icon's oscilloscope grid, faded toward the edges */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgb(51 242 115 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(51 242 115 / 0.07) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: -1px -1px;
+    mask-image: radial-gradient(1000px 560px at 50% 50%, #000 30%, transparent 85%);
+  }
+
+  .safe {
+    position: absolute; inset: 80px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 306px;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .brand { display: flex; align-items: center; gap: 18px; margin-bottom: 34px; }
+  .brand img { width: 68px; height: 68px; display: block; }
+  .brand span { font-size: 40px; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+
+  h1 {
+    margin: 0;
+    font-size: 54px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+  .lede { margin: 22px 0 0; font-size: 22px; line-height: 1.45; color: var(--dim); }
+
+  .trace { display: block; width: 100%; height: 72px; margin: 26px 0 18px; overflow: visible; }
+  .trace path {
+    fill: none; stroke: var(--phosphor); stroke-width: 3.5;
+    stroke-linejoin: round; stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgb(51 242 115 / 0.65));
+  }
+  .trace rect { fill: var(--phosphor); filter: drop-shadow(0 0 6px rgb(51 242 115 / 0.65)); }
+
+  .meta { font-size: 18px; color: var(--faint); }
+  .meta b { color: var(--phosphor); font-weight: 500; }
+
+  .shot { position: relative; height: 480px; }
+  .shot img {
+    position: relative; display: block; width: 306px; height: 480px;
+    filter: drop-shadow(0 18px 40px rgb(0 0 0 / 0.6));
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="safe">
+    <div>
+      <div class="brand">
+        <img src="../site/icon.png" alt="">
+        <span>flatline</span>
+      </div>
+      <h1>CPU, memory, network.<br>Nothing else.</h1>
+      <p class="lede">A small, fast menu bar monitor<br>for Apple Silicon Macs.</p>
+      <svg class="trace" viewBox="0 0 690 72" preserveAspectRatio="xMinYMid meet" aria-hidden="true">
+        <path d="M2 44 H150 L164 37 L176 44 H214 L234 8 L256 68 L272 30 L286 44 H404 L416 38 L426 44 H468 L486 16 L504 62 L518 36 L530 44 H650"/>
+        <rect x="664" y="26" width="12" height="36" rx="2"/>
+      </svg>
+      <p class="meta"><b>$</b> brew install --cask banastas/tap/flatline</p>
+    </div>
+    <div class="shot">
+      <img src="../site/screenshots/popover.png" alt="">
+    </div>
+  </div>
+</body>
+</html>
