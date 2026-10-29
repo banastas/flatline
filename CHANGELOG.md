@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (2026-10-29)
+
+- Redrawn app icon: a single heartbeat that runs flat into the cursor
+
 ## 1.0.0 (2026-10-26)
 
 The first stable release. If you're on 0.2.1, the app is unchanged; this marks it as 1.0.
@@ -18,7 +22,7 @@ The first stable release. If you're on 0.2.1, the app is unchanged; this marks i
 
 ## 0.2.0 (2026-10-25)
 
-- New app icon: a heartbeat that flatlines into a terminal cursor
+- Redrawn app icon: a single heartbeat that runs flat into the cursor
 - Offers to start at login the first time it runs from Applications
 - Settings switches and pickers now use your accent color
 - Uses about 5 MB less memory after the popover closes

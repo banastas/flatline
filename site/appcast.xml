@@ -3,6 +3,26 @@
     <channel>
         <title>flatline</title>
         <item>
+            <title>1.0.1</title>
+            <pubDate>Thu, 29 Oct 2026 14:43:18 -0700</pubDate>
+            <link>https://flatline.banast.as</link>
+            <sparkle:version>6</sparkle:version>
+            <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<ul>
+  <li>Redrawn app icon: a single heartbeat that runs flat into the cursor</li>
+</ul>
+]]></description>
+            <enclosure url="https://flatline.banast.as/releases/flatline-1.0.1.dmg" length="3409659" type="application/octet-stream" sparkle:edSignature="XjE6+ORu3BLMiav7tHWEx1/+OsP3gL/Jma+q0OtGWGH/Js7tkFH+UhIC/+9CKvbQJvXtRFNzV5pgSJGxapJeDQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://flatline.banast.as/releases/flatline6-5.delta" sparkle:deltaFrom="5" length="1022426" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="XOnJoq00UvV60fmydtoU4OhaTnP+SgakJU6wrqqQ6iErHf2nH8uQOalAjHMjAIPOCQYH+FrFe3kp7HWuDT+oBw=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline6-4.delta" sparkle:deltaFrom="4" length="1023318" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="6VkPvy0hhPsetlQTOiE4LAoEGml4fYeumjyNcx7bek5JA1vEtIYJHGGdhIpjvk0eU/rbu1CCGcjlPdeKhYOdCQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline6-3.delta" sparkle:deltaFrom="3" length="1070322" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="FwnBJVlZsciD46kCC6fJXNkS/EHFkRBi1mr4OnYYICXoCZH8q5izjkosbwKej3GW5K9VK/rkVyMDoo81u+5+Cw=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline6-2.delta" sparkle:deltaFrom="2" length="1235366" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="HheyKQnvsXN+NrI/RLAFzmf9ko+AO5UZNNdcA4XISpRNx5zggm2rjmrEKTe1N4DN5OiXov5o47zdYh3hxh7zAg=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline6-1.delta" sparkle:deltaFrom="1" length="1235370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="eXkPFUiIle8jYcINyjTQKK4Ky+daVnGCD5uQZlMmn7Z1grm6a8n/51+Ng3ztFpVPrSGtiPhwPXFuZQkMKI+HDg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.0.0</title>
             <pubDate>Mon, 26 Oct 2026 08:59:47 -0700</pubDate>
             <link>https://flatline.banast.as</link>
@@ -44,26 +64,6 @@
                 <enclosure url="https://flatline.banast.as/releases/flatline4-3.delta" sparkle:deltaFrom="3" length="60050" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TB8hoQi4k8iKfYWKY8IgFxvVckgEQx1B1nNdSkMJw4xt3PPqwV1faH7ieefgfhdzCjvObQvBOpURarf69BKrAQ=="/>
                 <enclosure url="https://flatline.banast.as/releases/flatline4-2.delta" sparkle:deltaFrom="2" length="1239674" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="AM4ppCxw61JfbqCLa8cBP0/7xQnTEv4eYq6P5aFA5n9+phbWebKW+4KwfjS6BSaCsnKL4uV2Lce8Uq79O0BjDg=="/>
                 <enclosure url="https://flatline.banast.as/releases/flatline4-1.delta" sparkle:deltaFrom="1" length="1239894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vac439n3M8+TxV4Vfdy0S3TXHiKRaXQEWGb3c9AXPEQUEMgLfptFvb8uml7AHaSa/SOzbHuI+Ls0TzNnSoHJDw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>0.2.0</title>
-            <pubDate>Sun, 25 Oct 2026 23:13:29 -0700</pubDate>
-            <link>https://flatline.banast.as</link>
-            <sparkle:version>3</sparkle:version>
-            <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<ul>
-  <li>New app icon: a heartbeat that flatlines into a terminal cursor</li>
-  <li>Offers to start at login the first time it runs from Applications</li>
-  <li>Settings switches and pickers now use your accent color</li>
-  <li>Uses about 5 MB less memory after the popover closes</li>
-</ul>
-]]></description>
-            <enclosure url="https://flatline.banast.as/releases/flatline-0.2.0.dmg" length="3412527" type="application/octet-stream" sparkle:edSignature="zbDpUChtDVCB5YbshmIyRGO5X5GmKB2IhrPBm5RVpfZDfh+fFUlwDOBPZr4kB4tysIwEzS+AUm+3RwR/SSwfBQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://flatline.banast.as/releases/flatline3-2.delta" sparkle:deltaFrom="2" length="1213114" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="tDPjTAi3Mmznqtv870noqyi/8xicAZhln/dH1sPi45Yb6cNEpbcuzU/S9IVmkt8v5VvkKb+sPDXf1Rm9K67mCA=="/>
-                <enclosure url="https://flatline.banast.as/releases/flatline3-1.delta" sparkle:deltaFrom="1" length="1213154" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="nsFoNCXNGMDlS/y4hLMwVef4igwYoFVJb/TRXCUutmSTAgAsFaNbcAD44MVH2x7fUzZvXnHn3jP5uUfry3PPBw=="/>
             </sparkle:deltas>
         </item>
     </channel>
