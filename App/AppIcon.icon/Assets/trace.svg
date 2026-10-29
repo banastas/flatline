@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <path d="M110 560 H330 L370 520 L402 560 H440 L510 250 L582 790 L630 470 L662 560 H790"
+  <!-- One beat on the centre grid line, then flat into a block cursor.
+       The lead-in is dimmed like decaying phosphor. -->
+  <path d="M158 512 H392" fill="none" stroke="#33F273" stroke-width="64" stroke-linecap="round" opacity="0.5"/>
+  <path d="M392 512 L448 240 L560 784 L616 512 H768"
         fill="none" stroke="#33F273" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="858" y="460" width="76" height="200" rx="12" fill="#33F273"/>
+  <rect x="832" y="412" width="64" height="200" rx="12" fill="#33F273"/>
 </svg>
