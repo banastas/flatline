@@ -1,6 +1,6 @@
 # flatline
 
-A small, fast menu bar monitor for Apple Silicon Macs. It shows **CPU**, **memory**, and **network** and nothing else.
+A menu bar monitor for Apple Silicon Macs that shows **CPU**, **memory**, and **network**, and nothing else.
 
 > Keep an eye on the trace. Hope it never goes flat.
 
