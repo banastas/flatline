@@ -3,6 +3,26 @@
     <channel>
         <title>flatline</title>
         <item>
+            <title>1.0.2</title>
+            <pubDate>Thu, 05 Nov 2026 22:10:40 -0800</pubDate>
+            <link>https://flatline.banast.as</link>
+            <sparkle:version>7</sparkle:version>
+            <sparkle:shortVersionString>1.0.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<ul>
+  <li>A new app icon, in the look it now shares with the other banast.as apps</li>
+</ul>
+]]></description>
+            <enclosure url="https://flatline.banast.as/releases/flatline-1.0.2.dmg" length="3716184" type="application/octet-stream" sparkle:edSignature="qRU5Mu2WD4MSt6N26kvF/yP4z1rvn89yB1Peef4lGl0zD/4GZvgI3v6Ff/6tFtD7iXoR3WQmbSLeCtF41FR/Bg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://flatline.banast.as/releases/flatline7-6.delta" sparkle:deltaFrom="6" length="2274782" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="bh8nT981PuFBVvEtHn2DCLZ4vO78cVG4qCuCrE0cw9B+rsvD4m2tmNjNVbFchJPOi21FaB0Ap84mzH6M+V8aAA=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline7-5.delta" sparkle:deltaFrom="5" length="2276186" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="0igF1V6ag3rJYMnKsqLhp7CRuCkx6a42Pc6/uhiZ8d1ZvfGs8dodv/QqbI7mJIMGlj57psfGEhRnYFGjt89aAQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline7-4.delta" sparkle:deltaFrom="4" length="2275566" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="pEaNcKUvvF2M4Jel/THD3aD3Fi7FZ+GtjRWjNZpc7HbvwaIIlhpz46nqRdAYXeUI4pwBIt4C89P4SneOqBZSBQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline7-3.delta" sparkle:deltaFrom="3" length="2308182" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="IevDWa0qisvOGmz3gj5O1SeeDwjhyyd5MmWA3rBj4ZLkIlPnQwImSWOhYk46lLp7tiravoydCiEvUs14C22fDQ=="/>
+                <enclosure url="https://flatline.banast.as/releases/flatline7-2.delta" sparkle:deltaFrom="2" length="2311318" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="UyT4/+3JQXX/oswLeDBtRZfc2JL+4yMUKnhJxARdQttCw7o0lm7GuScabYxSUP6Gk8P8eBmTBwMJsk7UdFEvCw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.0.1</title>
             <pubDate>Thu, 29 Oct 2026 14:43:18 -0700</pubDate>
             <link>https://flatline.banast.as</link>
@@ -46,24 +66,6 @@
                 <enclosure url="https://flatline.banast.as/releases/flatline5-3.delta" sparkle:deltaFrom="3" length="59986" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="R0vJutM8wCQBfvrLzXjMDi0NR2S1KMn1H+OaxGQm4Uswcs+ZcNbTTS4zs3qXzW6jFv5K+js1/1jvF34e38ssCQ=="/>
                 <enclosure url="https://flatline.banast.as/releases/flatline5-2.delta" sparkle:deltaFrom="2" length="1239598" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="dO/k23omXS0yci52R5m9fb+5DO8jIT9TuV8Fg7z19ZZTnDdI+Y51CBHCIB3KHuvC1HiLy4x1SWezvMGvtLxdBA=="/>
                 <enclosure url="https://flatline.banast.as/releases/flatline5-1.delta" sparkle:deltaFrom="1" length="1239886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="3OwxgoF/kxg3OnAgsnwI2379b482Kr108BnDZgChJRZgto7K2N6EDAimebYoGrGcJxY3O392iscyd8pBpiY/Bw=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>0.2.1</title>
-            <pubDate>Mon, 26 Oct 2026 07:50:17 -0700</pubDate>
-            <link>https://flatline.banast.as</link>
-            <sparkle:version>4</sparkle:version>
-            <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>27.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<ul>
-  <li>Uses less CPU when idle: about 0.1%, down from 0.14%. Drawing the menu bar is about four times cheaper.</li>
-</ul>
-]]></description>
-            <enclosure url="https://flatline.banast.as/releases/flatline-0.2.1.dmg" length="3415800" type="application/octet-stream" sparkle:edSignature="hKl0P1X2Yj/VzxwR3J3aMOXy8Ii7gssCYVVuLLEL+KKmmS05Y7oROF36KMmOWTCrN0Tz5o0b4Mv3H/9QXPcHAQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://flatline.banast.as/releases/flatline4-3.delta" sparkle:deltaFrom="3" length="60050" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="TB8hoQi4k8iKfYWKY8IgFxvVckgEQx1B1nNdSkMJw4xt3PPqwV1faH7ieefgfhdzCjvObQvBOpURarf69BKrAQ=="/>
-                <enclosure url="https://flatline.banast.as/releases/flatline4-2.delta" sparkle:deltaFrom="2" length="1239674" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="AM4ppCxw61JfbqCLa8cBP0/7xQnTEv4eYq6P5aFA5n9+phbWebKW+4KwfjS6BSaCsnKL4uV2Lce8Uq79O0BjDg=="/>
-                <enclosure url="https://flatline.banast.as/releases/flatline4-1.delta" sparkle:deltaFrom="1" length="1239894" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976464" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vac439n3M8+TxV4Vfdy0S3TXHiKRaXQEWGb3c9AXPEQUEMgLfptFvb8uml7AHaSa/SOzbHuI+Ls0TzNnSoHJDw=="/>
             </sparkle:deltas>
         </item>
     </channel>
